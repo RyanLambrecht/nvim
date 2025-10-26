@@ -33,8 +33,7 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
+-- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" }) vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
 -- [[ Basic Autocommands ]]
@@ -50,5 +49,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.hl.on_yank()
   end,
 })
+
+-- Keybinding: toggle terminal
+vim.keymap.set('n', '<leader>T', '<cmd>ToggleTerm<CR>', { desc = 'Toggle terminal' })
+
+-- Allow Esc or Ctrl-[ to exit terminal mode
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<C-[>', [[<C-\><C-n>]], { desc = 'Exit terminal mode (Ctrl-[)' })
+
+--potentially make it so that I can later use a keymap for running the file in the current directory
+--[[
+      -- Keybinding: run Go project (interactive)
+      vim.keymap.set("n", "<leader>r", function()
+        -- Use project root as working directory
+        local cwd = vim.fn.getcwd()
+        vim.cmd("TermExec cmd='go run .' dir='" .. cwd .. "'")
+      end, { desc = "Run Go project" })
+]]
+--
 
 -- vim: ts=2 sts=2 sw=2 et
