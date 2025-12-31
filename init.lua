@@ -36,4 +36,6 @@ require 'lazy-plugins'
 --  vim.env.HOME = vim.fn.expand '~'
 --end
 
+require 'autocmd'
+
 -- The line beneath this is called `modeline`. See `:help modeline`

@@ -60,6 +60,9 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
 
+-- Highlight the 75th column
+vim.opt.colorcolumn = '75'
+
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
@@ -71,4 +74,10 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Enable code folding using Treesitter
+vim.o.foldenable = true
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.o.foldlevel = 99 -- Prevent all folds from closing on open
+vim.o.foldlevelstart = 99
 -- vim: ts=2 sts=2 sw=2 et

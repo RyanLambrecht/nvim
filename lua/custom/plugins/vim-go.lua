@@ -6,7 +6,7 @@ return {
       vim.g.go_diagnostics_enabled = 0
       vim.g.go_metalinter_enabled = {}
       vim.g.go_jump_to_error = 0
-      vim.g.go_fmt_command = 'goimports'
+      vim.g.go_fmt_command = 'goimports' -- formats & auto-adds imports on save
       vim.g.go_auto_sameids = 0
       vim.g.go_highlight_types = 1
       vim.g.go_highlight_fields = 1
@@ -16,6 +16,10 @@ return {
       vim.g.go_highlight_extra_types = 1
       vim.g.go_highlight_build_constraints = 1
       vim.g.go_highlight_generate_tags = 1
+
+      -- Use gopls for completion and definition lookups
+      vim.g.go_def_mode = 'gopls'
+      vim.g.go_info_mode = 'gopls'
     end,
   },
 }

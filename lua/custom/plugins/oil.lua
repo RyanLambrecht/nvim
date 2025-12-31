@@ -34,12 +34,13 @@ return {
       ['<C-k>'] = false,
       ['<C-l>'] = false,
       ['q'] = 'actions.close',
+      ['<leader>r'] = 'actions.refresh',
     },
   },
 
   config = function(_, opts)
     require('oil').setup(opts)
     vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
-    vim.keymap.set('n', '<space>-', require('oil').toggle_float)
+    vim.keymap.set('n', '<space>-', require('oil').toggle_float, { desc = 'Oil Float' })
   end,
 }
