@@ -60,6 +60,11 @@ vim.keymap.set('t', '<C-[>', [[<C-\><C-n>]], { desc = 'Exit terminal mode (Ctrl-
 vim.keymap.set('n', '<leader>e', function()
   vim.diagnostic.open_float { focusable = true }
 end, { desc = 'Expand an Error into a float' })
+--
+--NOTE: this is for glow (latex/ mardown renderer in termnial)
+-- vim.keymap.set('n', '<leader>p', function()
+--   vim.cmd 'vsplit | terminal glow -p %'
+-- end)
 
 --potentially make it so that I can later use a keymap for running the file in the current directory
 --[[

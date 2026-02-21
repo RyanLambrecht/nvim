@@ -10,7 +10,7 @@ vim.o.number = true
 vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.o.mouse = 'a'
+vim.o.mouse = ''
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
@@ -80,4 +80,26 @@ vim.o.foldmethod = 'expr'
 vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldlevel = 99 -- Prevent all folds from closing on open
 vim.o.foldlevelstart = 99
+
+-- Always show the default tabline
+vim.o.showtabline = 2
+
+-- Override tabline with a Lua function that mimics default behavior but removes the x
+vim.o.tabline = '%!v:lua.NoCloseTabline()'
+
+-- Lua function to generate tabline without close button
+function _G.NoCloseTabline()
+  local s = ''
+  for i = 1, vim.fn.tabpagenr '$' do
+    local hl = '%#TabLine#'
+    if i == vim.fn.tabpagenr() then
+      hl = '%#TabLineSel#'
+    end
+    -- clickable tab number + first buffer name in the tab
+    local bufname = vim.fn.bufname(vim.fn.tabpagebuflist(i)[1])
+    s = s .. '%' .. i .. 'T' .. hl .. ' ' .. bufname .. ' '
+  end
+  s = s .. '%#TabLineFill#'
+  return s
+end
 -- vim: ts=2 sts=2 sw=2 et

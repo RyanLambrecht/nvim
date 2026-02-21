@@ -5,7 +5,6 @@ vim.api.nvim_create_autocmd('FileType', {
     'c',
     'cpp',
     'python',
-    'java',
     'javascript',
     'typescript',
     'lua',
