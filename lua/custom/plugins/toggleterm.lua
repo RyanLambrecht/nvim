@@ -11,6 +11,28 @@ return {
         close_on_exit = true,
         shell = vim.o.shell, -- use your default shell
       }
+
+      local Terminal = require('toggleterm.terminal').Terminal
+
+      -- <leader>T namespace: terminal-specific actions
+      vim.keymap.set('n', '<leader>Tf', function()
+        local ok, oil = pcall(require, 'oil')
+        local dir
+        if ok then
+          dir = oil.get_current_dir() or vim.fn.expand '%:p:h'
+        else
+          dir = vim.fn.expand '%:p:h'
+        end
+        Terminal:new({ dir = dir, direction = 'horizontal' }):toggle()
+      end, { desc = 'Terminal in current directory' })
+
+      vim.keymap.set('n', '<leader>Ts', function()
+        Terminal:new({ direction = 'horizontal' }):toggle()
+      end, { desc = 'Terminal horizontal split' })
+
+      vim.keymap.set('n', '<leader>Tv', function()
+        Terminal:new({ direction = 'vertical' }):toggle()
+      end, { desc = 'Terminal vertical split' })
     end,
   },
 }

@@ -51,7 +51,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Keybinding: toggle terminal
-vim.keymap.set('n', '<leader>T', '<cmd>ToggleTerm<CR>', { desc = 'Toggle terminal' })
+vim.keymap.set('n', '<leader>tt', '<cmd>ToggleTerm<CR>', { desc = 'Toggle [t]erminal' })
 
 -- Allow Esc or Ctrl-[ to exit terminal mode
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
@@ -66,6 +66,28 @@ end, { desc = 'Expand an Error into a float' })
 --   vim.cmd 'vsplit | terminal glow -p %'
 -- end)
 
+-- Toggle spell check
+vim.keymap.set('n', '<leader>ts', function()
+  vim.opt.spell = not vim.opt.spell:get()
+  print('Spell check: ' .. (vim.opt.spell:get() and 'ON' or 'OFF'))
+end, { desc = 'Toggle spell check' })
+
+vim.keymap.set('n', '<M-Left>', '5<C-w><', { desc = 'Resize split left' })
+vim.keymap.set('n', '<M-Right>', '5<C-w>>', { desc = 'Resize split right' })
+vim.keymap.set('n', '<M-Up>', '5<C-w>+', { desc = 'Resize split up' })
+vim.keymap.set('n', '<M-Down>', '5<C-w>-', { desc = 'Resize split down' })
+
+vim.keymap.set('n', '<leader>R', function()
+  local clients = vim.lsp.get_clients { bufnr = 0 }
+  for _, client in ipairs(clients) do
+    if client.config.root_dir then
+      vim.fn.chdir(client.config.root_dir)
+      vim.notify('cwd → ' .. client.config.root_dir)
+      return
+    end
+  end
+  vim.notify('No LSP root found', vim.log.levels.WARN)
+end, { desc = 'CD to LSP project root' })
 --potentially make it so that I can later use a keymap for running the file in the current directory
 --[[
       -- Keybinding: run Go project (interactive)

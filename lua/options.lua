@@ -61,10 +61,13 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.inccommand = 'split'
 
 -- Highlight the 75th column
-vim.opt.colorcolumn = '75'
+vim.opt.colorcolumn = '80'
 
 -- Show which line your cursor is on
 vim.o.cursorline = true
+
+vim.opt.tabstop = 4 -- render tabs as 4 spaces wide
+vim.opt.shiftwidth = 4 -- match indentation operations
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
@@ -82,7 +85,7 @@ vim.o.foldlevel = 99 -- Prevent all folds from closing on open
 vim.o.foldlevelstart = 99
 
 -- Always show the default tabline
-vim.o.showtabline = 2
+vim.o.showtabline = 1
 
 -- Override tabline with a Lua function that mimics default behavior but removes the x
 vim.o.tabline = '%!v:lua.NoCloseTabline()'

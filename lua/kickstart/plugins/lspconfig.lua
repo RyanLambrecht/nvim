@@ -20,7 +20,17 @@ return {
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
-      'mason-org/mason-lspconfig.nvim',
+      {
+        'mason-org/mason-lspconfig.nvim',
+        opts = {
+          automatic_enable = {
+            exclude = {
+              -- external plugin
+              'jdtls',
+            },
+          },
+        },
+      },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -211,6 +221,8 @@ return {
         clangd = {},
         gopls = {},
         pyright = {},
+        markdown_oxide = {},
+        texlab = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -252,6 +264,7 @@ return {
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        'jdtls',
         'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -270,6 +283,16 @@ return {
           end,
         },
       }
+
+      -- sourcekit-lsp for Swift (not managed by mason, ships with Xcode)
+      vim.lsp.config('sourcekit', {
+        capabilities = capabilities,
+        root_dir = function(_, callback)
+          callback(require('lspconfig.util').root_pattern 'Package.swift'(vim.fn.getcwd()) or require('lspconfig.util').find_git_ancestor(vim.fn.getcwd()))
+        end,
+        cmd = { vim.trim(vim.fn.system 'xcrun -f sourcekit-lsp') },
+      })
+      vim.lsp.enable 'sourcekit'
     end,
   },
 }

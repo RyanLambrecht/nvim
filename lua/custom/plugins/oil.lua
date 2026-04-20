@@ -1,9 +1,7 @@
 return {
-
   'stevearc/oil.nvim',
   lazy = false,
   dependencies = { 'nvim-tree/nvim-web-devicons' },
-
   opts = {
     default_file_explorer = true,
     delete_to_trash = true,
@@ -15,18 +13,15 @@ return {
         return name == '..' or name == '.git'
       end,
     },
-
     float = {
       padding = 2,
       max_width = 90,
       max_height = 0,
     },
-
     win_options = {
       wrap = true,
       winblend = 0,
     },
-
     keymaps = {
       ['<C-c>'] = false,
       ['<C-h>'] = false,
@@ -34,13 +29,27 @@ return {
       ['<C-k>'] = false,
       ['<C-l>'] = false,
       ['q'] = 'actions.close',
-      ['<leader>r'] = 'actions.refresh',
+      ['<localleader>r'] = 'actions.refresh',
+      ['<localleader>t'] = {
+        callback = function()
+          local oil = require 'oil'
+          local Terminal = require('toggleterm.terminal').Terminal
+          local dir = oil.get_current_dir()
+          if not dir then
+            vim.notify('Oil: no current directory', vim.log.levels.WARN)
+            return
+          end
+          Terminal:new({
+            cmd = 'cd ' .. vim.fn.shellescape(dir) .. ' && $SHELL',
+            direction = 'horizontal',
+            close_on_exit = false,
+          }):toggle()
+        end,
+        desc = 'Oil: open terminal in current dir',
+      },
     },
   },
-
-  config = function(_, opts)
-    require('oil').setup(opts)
-    vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
-    vim.keymap.set('n', '<space>-', require('oil').toggle_float, { desc = 'Oil Float' })
-  end,
+  keys = {
+    { '-', '<CMD>Oil<CR>', desc = 'Open parent directory' },
+  },
 }

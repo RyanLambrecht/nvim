@@ -5,8 +5,24 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
+
+      local original = lint.linters.swiftlint
+
+      lint.linters.swiftlint = function()
+        local linter = original()
+
+        linter.args = {
+          '--config',
+          os.getenv 'HOME' .. '/.config/swiftlint/.swiftlint.yml',
+          '--quiet',
+        }
+
+        return linter
+      end
+
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
+        swift = { 'swiftlint' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
@@ -50,7 +66,7 @@ return {
           -- Only run the linter in buffers that you can modify in order to
           -- avoid superfluous noise, notably within the handy LSP pop-ups that
           -- describe the hovered symbol using Markdown.
-          if vim.bo.modifiable then
+          if vim.bo.modifiable and not vim.endswith(vim.fn.bufname(), 'swiftinterface') then
             lint.try_lint()
           end
         end,

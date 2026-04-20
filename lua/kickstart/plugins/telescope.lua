@@ -28,8 +28,6 @@ return {
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
-
-      { 'https://git.myzel394.app/Myzel394/jsonfly.nvim' },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -73,18 +71,16 @@ return {
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
-      pcall(require('telescope').load_extension, 'jsonfly')
 
-      vim.keymap.set('n', '<leader>j', '<cmd>Telescope jsonfly<CR>', { desc = 'Open json(fly)' })
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sF', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+      vim.keymap.set('n', '<leader>sD', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
@@ -108,9 +104,57 @@ return {
       end, { desc = '[S]earch [/] in Open Files' })
 
       -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>sn', function()
+      vim.keymap.set('n', '<leader>sC', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
+      end, { desc = '[S]earch neovim [C]onfig files' })
+
+      -- Shortcut for searching your notes files
+      vim.keymap.set('n', '<leader>sN', function()
+        builtin.find_files { cwd = '~/notes/' }
+      end, { desc = '[S]earch [N]otes files' })
+
+      -- Shortcut for searching notes directories
+      vim.keymap.set('n', '<leader>sn', function()
+        builtin.find_files {
+          cwd = '~/notes/',
+          find_command = { 'find', '.', '-type', 'd' },
+          prompt_title = 'Search note directories',
+        }
+      end, { desc = '[S]earch [n]ote directories' })
+
+      -- Shortcut for searching your projects files
+      vim.keymap.set('n', '<leader>sP', function()
+        builtin.find_files {
+          cwd = '~/code/',
+        }
+      end, { desc = '[S]earch [P]roject files' })
+
+      -- Shortcut for searching project directories
+      vim.keymap.set('n', '<leader>sp', function()
+        builtin.find_files {
+          cwd = '~/code/',
+          find_command = { 'fd', '--type', 'd', '--max-depth', '2', '--min-depth', '2' },
+          prompt_title = 'Search Projects',
+          previewer = false,
+        }
+      end, { desc = '[S]earch [p]roject directories' })
+
+      -- Shortcut for searching directories from pwd
+      vim.keymap.set('n', '<leader>sd', function()
+        builtin.find_files {
+          find_command = { 'find', '.', '-type', 'd' },
+        }
+      end, { desc = '[S]earch [d]irectories' })
+
+      -- Shortcut for command palette
+      vim.keymap.set('n', '<leader>p', function()
+        builtin.commands {}
+      end, { desc = 'command [p]alette' })
+
+      -- Shortcut for vim options
+      vim.keymap.set('n', '<leader>so', function()
+        builtin.vim_options {}
+      end, { desc = '[o]ptions' })
     end,
   },
 }

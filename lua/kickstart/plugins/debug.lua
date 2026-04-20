@@ -23,6 +23,12 @@ return {
 
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
+
+    -- nvim-jdtls handles Java DAP setup itself via jdtls.setup_dap(),
+    -- which is called in its on_attach (see lua/custom/plugins/jdtls.lua).
+    -- We list it here as a dependency so DAP is always ready before any
+    -- Java buffer tries to attach to it.
+    'mfussenegger/nvim-jdtls',
   },
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
@@ -94,7 +100,12 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        'delve', -- Go debugger
+
+        -- Java debug adapter. Enables breakpoints, step-through debugging etc.
+        -- for Java via nvim-jdtls. Install java-test too if you want to run
+        -- individual JUnit tests from inside Neovim.
+        'java-debug-adapter',
       },
     }
 
@@ -124,7 +135,7 @@ return {
     -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
     -- vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
     -- local breakpoint_icons = vim.g.have_nerd_font
-    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
+    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
     --   or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
     -- for type, icon in pairs(breakpoint_icons) do
     --   local tp = 'Dap' .. type
@@ -144,5 +155,37 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+
+    -- Swift / Xcode debugging via xcodebuild.nvim
+    local ok, xcodebuild = pcall(require, 'xcodebuild.integrations.dap')
+    if ok then
+      xcodebuild.setup()
+    end
+
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'swift',
+      callback = function(ev)
+        local opts = { buffer = ev.buf }
+        vim.keymap.set('n', '<leader>dd', function()
+          require('xcodebuild.integrations.dap').build_and_debug()
+        end, vim.tbl_extend('force', opts, { desc = 'Debug: Build & Debug (Swift)' }))
+        vim.keymap.set('n', '<leader>dr', function()
+          require('xcodebuild.integrations.dap').debug_without_build()
+        end, vim.tbl_extend('force', opts, { desc = 'Debug: Attach Debugger (Swift)' }))
+        vim.keymap.set('n', '<leader>dt', function()
+          require('xcodebuild.integrations.dap').debug_tests()
+        end, vim.tbl_extend('force', opts, { desc = 'Debug: Debug Tests (Swift)' }))
+        vim.keymap.set('n', '<leader>dx', function()
+          require('xcodebuild.integrations.dap').terminate_session()
+        end, vim.tbl_extend('force', opts, { desc = 'Debug: Terminate (Swift)' }))
+      end,
+    })
+
+    -- NOTE: Java DAP does NOT need manual configuration here.
+    -- Unlike Go (which uses nvim-dap-go), Java's debug adapter is bundled
+    -- inside jdtls itself. The setup is handled automatically by calling
+    -- jdtls.setup_dap() inside the on_attach of lua/custom/plugins/jdtls.lua.
+    -- All your normal debug keymaps (<F5>, <F1>, <F2>, etc.) will work for
+    -- Java the same way they do for Go once jdtls is attached to a buffer.
   end,
 }
