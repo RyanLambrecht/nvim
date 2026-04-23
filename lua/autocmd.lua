@@ -28,26 +28,6 @@ vim.api.nvim_create_autocmd('FileType', {
   once = true, -- only register snippets once
 })
 
---Makes rendered preview for md/tex
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'markdown', 'tex' },
-  callback = function()
-    vim.keymap.set('n', '<leader>mp', function()
-      local file = vim.fn.expand '%:p'
-      local out = '/tmp/' .. vim.fn.expand '%:t:r' .. '.pdf'
-      vim.fn.jobstart({ 'pandoc', file, '-o', out, '--pdf-engine=xelatex' }, {
-        on_exit = function(_, code)
-          if code == 0 then
-            vim.fn.jobstart { 'open', out } -- macOS; use 'zathura' or 'evince' on Linux
-          else
-            vim.notify('Pandoc failed', vim.log.levels.ERROR)
-          end
-        end,
-      })
-    end, { buffer = true, desc = 'Preview as PDF' })
-  end,
-})
-
 -- makes pdf of markdown or latex file in buffer
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'markdown', 'tex' },
@@ -81,10 +61,25 @@ vim.api.nvim_create_autocmd('FileType', {
     end, { buffer = true, desc = 'Preview as PDF (same dir)' })
   end,
 })
+-- gets rid of airline attatching itself to floating buf
+vim.api.nvim_create_autocmd('WinEnter', {
+  callback = function()
+    local win = vim.api.nvim_get_current_win()
+    if vim.api.nvim_win_get_config(win).relative ~= '' then
+      vim.defer_fn(function()
+        if vim.api.nvim_win_is_valid(win) then
+          vim.wo[win].statusline = ' '
+        end
+      end, 10)
+    end
+  end,
+})
 
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = { 'markdown', 'text' },
---   callback = function()
---     vim.opt_local.wrap = true
---   end,
--- })
+-- Highlight on yank
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking text',
+  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})

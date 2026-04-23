@@ -14,8 +14,12 @@ return {
 
       local Terminal = require('toggleterm.terminal').Terminal
 
-      -- <leader>T namespace: terminal-specific actions
-      vim.keymap.set('n', '<leader>Tf', function()
+      -- <leader>t namespace: terminal-specific actions
+      -- Keybinding: toggle terminal
+      vim.keymap.set('n', '<leader>tt', '<cmd>ToggleTerm<CR>', { desc = 'Toggle [t]erminal' })
+
+      -- dir of buffer, supports oil
+      vim.keymap.set('n', '<leader>th', function()
         local ok, oil = pcall(require, 'oil')
         local dir
         if ok then
@@ -24,13 +28,13 @@ return {
           dir = vim.fn.expand '%:p:h'
         end
         Terminal:new({ dir = dir, direction = 'horizontal' }):toggle()
-      end, { desc = 'Terminal in current directory' })
+      end, { desc = 'Terminal here' })
 
-      vim.keymap.set('n', '<leader>Ts', function()
+      vim.keymap.set('n', '<leader>ts', function()
         Terminal:new({ direction = 'horizontal' }):toggle()
       end, { desc = 'Terminal horizontal split' })
 
-      vim.keymap.set('n', '<leader>Tv', function()
+      vim.keymap.set('n', '<leader>tv', function()
         Terminal:new({ direction = 'vertical' }):toggle()
       end, { desc = 'Terminal vertical split' })
     end,

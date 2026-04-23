@@ -125,6 +125,7 @@ return {
       -- Shortcut for searching your projects files
       vim.keymap.set('n', '<leader>sP', function()
         builtin.find_files {
+          find_command = { 'fd', '--type', 'd' },
           cwd = '~/code/',
         }
       end, { desc = '[S]earch [P]roject files' })

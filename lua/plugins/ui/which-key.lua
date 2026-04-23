@@ -66,6 +66,7 @@ return {
         { 'gr', group = 'LSP-[r]elated group' },
         { '<leader>m', group = 'music' },
         { '<leader>T', group = '[T]erminal' },
+        { '<leader>n', group = '[n]eovim' },
       },
     },
   },

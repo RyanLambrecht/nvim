@@ -8,11 +8,11 @@ return {
   config = true,
   keys = {
     {
-      '<leader>mp',
+      '<leader>mt',
       function()
         require('apple-music').toggle_play()
       end,
-      desc = 'Toggle [P]layback',
+      desc = '[t]oggle Playback',
     },
     {
       '<leader>ms',
@@ -48,6 +48,20 @@ return {
         require('apple-music').cleanup_all()
       end,
       desc = 'Cleanup Temp Playlists',
+    },
+    {
+      '<leader>mp',
+      function()
+        require('apple-music').previous_track()
+      end,
+      desc = '[p]revious track',
+    },
+    {
+      '<leader>mn',
+      function()
+        require('apple-music').previous_track()
+      end,
+      desc = '[ ]ext track',
     },
   },
 }

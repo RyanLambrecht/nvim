@@ -30,6 +30,7 @@ return {
       ['<C-l>'] = false,
       ['q'] = 'actions.close',
       ['<localleader>r'] = 'actions.refresh',
+      ['<localleader>y'] = 'actions.yank_entry',
       ['<localleader>t'] = {
         callback = function()
           local oil = require 'oil'
