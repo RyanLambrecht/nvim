@@ -1,4 +1,4 @@
--- Alternatively, use `config = function() ... end` for full control over the configuration.
+--- Alternatively, use `config = function() ... end` for full control over the configuration.
 -- If you prefer to call `setup` explicitly, use:
 --    {
 --        'lewis6991/gitsigns.nvim',

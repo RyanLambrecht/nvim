@@ -15,28 +15,28 @@ return {
       desc = '[t]oggle Playback',
     },
     {
-      '<leader>ms',
+      '<leader>mS',
       function()
         require('apple-music').toggle_shuffle()
       end,
       desc = 'Toggle [S]huffle',
     },
     {
-      '<leader>mfp',
+      '<leader>msp',
       function()
         require('apple-music').select_playlist()
       end,
       desc = '[F]ind [P]laylists',
     },
     {
-      '<leader>mfa',
+      '<leader>msa',
       function()
         require('apple-music').select_album()
       end,
       desc = '[F]ind [A]lbum',
     },
     {
-      '<leader>mfs',
+      '<leader>mss',
       function()
         require('apple-music').select_track()
       end,
@@ -59,9 +59,9 @@ return {
     {
       '<leader>mn',
       function()
-        require('apple-music').previous_track()
+        require('apple-music').next_track()
       end,
-      desc = '[ ]ext track',
+      desc = '[n]ext track',
     },
   },
 }

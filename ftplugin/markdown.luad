@@ -1,0 +1,1 @@
+vim.keymap.set('i', '<C-.>f', '\frac<C-y>', { desc = 'quick frac' })

@@ -1,0 +1,23 @@
+diff --git a/lua/NeoColumn.lua b/lua/NeoColumn.lua
+index 9e10911..1ae3c51 100644
+--- a/lua/NeoColumn.lua
++++ b/lua/NeoColumn.lua
+@@ -110,8 +110,7 @@ function NeoColumn.apply_neocolumn()
+   local always_on = config.always_on
+   local excluded_ft = config.excluded_ft
+   local NeoColumn_value = type(config.NeoColumn) == "string" and { config.NeoColumn } or config.NeoColumn
+-  local fg_color = (config.fg_color ~= "" and config.fg_color) or fn.synIDattr(fn.hlID("IncSearch"), "fg#")
+-  local bg_color = (config.bg_color ~= "" and config.bg_color) or fn.synIDattr(fn.hlID("IncSearch"), "bg#")
++  local bg_color = (config.bg_color ~= "" and config.bg_color) or fn.synIDattr(fn.hlID("ColorColumn"), "bg#")
+ 
+   fn.clearmatches()
+ 
+@@ -119,7 +118,7 @@ function NeoColumn.apply_neocolumn()
+ 
+   if not vim.tbl_contains(excluded_ft, filetype) then
+     if (always_on and not neocolumn_bufs[file_path]) or (not always_on and neocolumn_bufs[file_path]) then
+-      cmd("silent! highlight ColorColumn guifg=" .. fg_color .. " guibg=" .. bg_color)
++      cmd("silent! highlight ColorColumn guibg=" .. bg_color)
+       if config.custom_NeoColumn[filetype] then
+         local custom_value = type(config.custom_NeoColumn[filetype]) == "string" and { config.custom_NeoColumn[filetype] } or config.custom_NeoColumn[filetype]
+         for _, v in ipairs(custom_value) do

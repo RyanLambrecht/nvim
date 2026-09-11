@@ -15,6 +15,9 @@ require 'lazy-bootstrap'
 require 'lazy-plugins'
 require 'autocmd'
 
+-- custom
+require('cursorline').setup()
+
 -- experimental ui
 
 require('vim._core.ui2').enable {}

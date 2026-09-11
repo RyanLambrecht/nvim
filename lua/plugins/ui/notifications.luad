@@ -1,0 +1,32 @@
+return {
+
+  {
+    'rcarriga/nvim-notify',
+    opts = {
+      background_colour = 'NotifyBackground',
+      fps = 120,
+      icons = {
+        DEBUG = '',
+        ERROR = '',
+        INFO = '',
+        TRACE = '✎',
+        WARN = '',
+      },
+      level = 2,
+      minimum_width = 50,
+      render = 'minimal',
+      stages = 'static',
+      time_formats = {
+        notification = '%T',
+        notification_history = '%FT%T',
+      },
+      timeout = 5000,
+      top_down = true,
+    },
+    config = function(_, opts)
+      local notify = require 'notify'
+      notify.setup(opts)
+      vim.notify = notify
+    end,
+  },
+}

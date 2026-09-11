@@ -30,7 +30,17 @@ return {
       ['<C-l>'] = false,
       ['q'] = 'actions.close',
       ['<localleader>r'] = 'actions.refresh',
-      ['<localleader>y'] = 'actions.yank_entry',
+      ['<localleader>Y'] = 'actions.yank_entry',
+      ['<localleader>y'] = {
+        callback = function()
+          local dir = require('oil').get_current_dir()
+          if dir then
+            vim.fn.setreg('+', dir)
+            vim.notify('Yanked: ' .. dir)
+          end
+        end,
+        desc = 'Oil: yank current directory',
+      },
       ['<localleader>t'] = {
         callback = function()
           local oil = require 'oil'

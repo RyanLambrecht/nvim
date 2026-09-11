@@ -33,8 +33,21 @@ vim.keymap.set('n', '<leader>nr', function()
   local session = vim.fn.stdpath 'state' .. '/restart_session.vim'
   vim.cmd('mksession! ' .. vim.fn.fnameescape(session))
   vim.cmd('restart source ' .. vim.fn.fnameescape(session))
-end, { desc = 'Restart Neovim' })
-vim.keymap.set('n', '<leader>nc', ':%bd|e#<CR>', { desc = 'Clear other buffers' })
+end, { desc = '[r]estart Neovim' })
+
+vim.keymap.set('n', '<leader>nR', ':restart<cr>', { desc = '[R]estart Neovim [hard]' })
+
+vim.keymap.set('n', '<leader>nc', function()
+  local current = vim.api.nvim_get_current_buf()
+
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if buf ~= current and vim.api.nvim_buf_is_loaded(buf) then
+      vim.cmd('bdelete ' .. buf)
+    end
+  end
+end, { desc = '[c]lear other buffers' })
+
+vim.keymap.set('n', '<leader>nC', ':%bd<cr>', { desc = '[c]lear all buffers' })
 
 -- Misc
 vim.keymap.set('n', '<leader>Ts', function()
@@ -53,3 +66,35 @@ vim.keymap.set('n', '<leader>R', function()
   end
   vim.notify('No LSP root found', vim.log.levels.WARN)
 end, { desc = 'CD to LSP root' })
+
+vim.keymap.set('n', '<leader>F', function()
+  local floats = vim.tbl_filter(function(w)
+    if vim.api.nvim_win_get_config(w).relative == '' then
+      return false
+    end
+    local name = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
+    return not name:match '%[Pager%]' and not name:match '%[Cmd%]' and not name:match '%[Msg%]' and not name:match '%[Dialog%]'
+  end, vim.api.nvim_list_wins())
+
+  if #floats == 0 then
+    vim.notify('No floating window found', vim.log.levels.WARN)
+    return
+  end
+
+  local win = math.max(unpack(floats))
+  local buf = vim.api.nvim_win_get_buf(win)
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  local ft = vim.bo[buf].filetype
+  vim.api.nvim_win_close(win, true)
+
+  vim.cmd 'belowright split'
+  vim.api.nvim_win_set_height(0, math.min(15, #lines))
+  local new_buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_win_set_buf(0, new_buf)
+  vim.api.nvim_buf_set_lines(new_buf, 0, -1, false, lines)
+  vim.bo[new_buf].filetype = ft
+  vim.bo[new_buf].modifiable = false
+end, { desc = 'Float: move to split' })
+
+-- easy insert & for matrix
+vim.keymap.set('i', '<C-e>', '& ', { desc = 'insert space for matrix' })

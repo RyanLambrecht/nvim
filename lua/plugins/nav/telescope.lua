@@ -1,17 +1,10 @@
--- NOTE: Plugins can specify dependencies.
---
--- The dependencies are proper plugin specifications as well - anything
--- you do for a plugin at the top level, you can do for a dependency.
---
--- Use the `dependencies` key to specify the dependencies of a particular plugin
-
 return {
-  { -- Fuzzy Finder (files, lsp, etc)
+  {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      { -- If encountering errors, see telescope-fzf-native README for installation instructions
+      {
         'nvim-telescope/telescope-fzf-native.nvim',
 
         -- `build` is used to run some command when the plugin is installed/updated.
@@ -55,10 +48,13 @@ return {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
+        defaults = {
+          -- mappings = {
+          --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          preview = {
+            treesitter = false,
+          },
+        },
         -- },
         -- pickers = {}
         extensions = {
@@ -130,6 +126,15 @@ return {
         }
       end, { desc = '[S]earch [P]roject files' })
 
+      -- Shortcut for searching dev directories
+      vim.keymap.set('n', '<leader>sv', function()
+        builtin.find_files {
+          cwd = '~/dev/',
+          find_command = { 'fd', '--type', 'd', '--max-depth', '2', '--min-depth', '1' },
+          prompt_title = 'Search Projects',
+          previewer = false,
+        }
+      end, { desc = '[S]earch [p]roject directories' })
       -- Shortcut for searching project directories
       vim.keymap.set('n', '<leader>sp', function()
         builtin.find_files {
@@ -144,13 +149,14 @@ return {
       vim.keymap.set('n', '<leader>sd', function()
         builtin.find_files {
           find_command = { 'find', '.', '-type', 'd' },
+          previewer = false,
         }
       end, { desc = '[S]earch [d]irectories' })
 
-      -- Shortcut for command palette
-      vim.keymap.set('n', '<leader>p', function()
-        builtin.commands {}
-      end, { desc = 'command [p]alette' })
+      -- -- Shortcut for "command palette"
+      -- vim.keymap.set('n', '<leader>p', function()
+      --   builtin.commands {}
+      -- end, { desc = 'command [p]alette' })
 
       -- Shortcut for vim options
       vim.keymap.set('n', '<leader>so', function()

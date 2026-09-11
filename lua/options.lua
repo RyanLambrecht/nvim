@@ -4,13 +4,23 @@ vim.o.relativenumber = true
 
 -- UI
 vim.o.showmode = false
-vim.o.cursorline = true
 vim.o.signcolumn = 'yes'
 vim.o.scrolloff = 10
-vim.o.colorcolumn = '80'
+vim.o.inccommand = 'split'
+vim.o.list = true
+vim.opt.listchars = {
+  tab = '» ',
+  trail = '·',
+  nbsp = '␣',
+}
+vim.o.termguicolors = true
+
+--vim.o.colorcolumn = '80'
 vim.o.inccommand = 'split'
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.o.termguicolors = true
+-- vim.api.nvim_set_hl(0, 'Cursor', { fg = '#000000', bg = '#FF0000' })
 
 -- Splits
 vim.o.splitright = true

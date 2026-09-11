@@ -33,6 +33,9 @@ return {
         lua = { 'stylua' },
         markdown = { 'prettier' },
         swift = { 'swiftformat' },
+        c = { 'clang-format' },
+        json = { 'fixjson' },
+        go = { 'goimports' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

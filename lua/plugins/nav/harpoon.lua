@@ -3,7 +3,7 @@ return {
   branch = 'harpoon2',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    'nvim-telescope/telescope.nvim',
+    -- 'nvim-telescope/telescope.nvim',
   },
 
   config = function()
@@ -32,6 +32,13 @@ return {
           list():remove()
         end,
         desc = 'Harpoon: remove file',
+      },
+      {
+        '<leader>jc',
+        function()
+          list():clear()
+        end,
+        desc = 'Harpoon: clear all files',
       },
       {
         '<leader>jj',
