@@ -3,7 +3,6 @@ return {
   branch = 'harpoon2',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    -- 'nvim-telescope/telescope.nvim',
   },
 
   config = function()
@@ -94,27 +93,24 @@ return {
         desc = 'Harpoon: prev file',
       },
 
-      -- telescope integration
+      -- snacks integration
       {
         '<leader>sj',
         function()
-          local conf = require('telescope.config').values
-
           local files = {}
+
           for _, item in ipairs(list().items) do
-            table.insert(files, item.value)
+            table.insert(files, {
+              text = item.value,
+              file = item.value,
+            })
           end
 
-          require('telescope.pickers')
-            .new({}, {
-              prompt_title = 'Harpoon',
-              finder = require('telescope.finders').new_table {
-                results = files,
-              },
-              previewer = conf.file_previewer {},
-              sorter = conf.generic_sorter {},
-            })
-            :find()
+          Snacks.picker {
+            items = files,
+            format = 'file',
+            title = 'Harpoon',
+          }
         end,
         desc = '[s]earch Harpoon files',
       },

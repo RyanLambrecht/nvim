@@ -1,0 +1,47 @@
+return {
+  { 'alanfortlink/blackjack.nvim', cmd = 'BlackJackNewGame' },
+  { 'seandewar/killersheep.nvim', cmd = 'KillKillKill' },
+  { 'seandewar/nvimesweeper', cmd = 'Nvimesweeper' },
+  { 'zyedidia/vim-snake', cmd = 'Snake' },
+  { 'jim-fx/sudoku.nvim', cmd = 'Sudoku' },
+  { 'alec-gibson/nvim-tetris', cmd = 'Tetris' },
+  { 'efueyo/td.nvim', cmd = 'TdStart' },
+
+  {
+    'folke/snacks.nvim',
+    optional = true,
+    cmd = 'Games',
+    config = function()
+      vim.api.nvim_create_user_command('Games', function()
+        local games = {
+          { name = 'BlackJack', cmd = 'BlackJackNewGame' },
+          { name = 'KillerSheep', cmd = 'KillKillKill' },
+          { name = 'Minesweeper', cmd = 'Nvimesweeper' },
+          { name = 'Snake', cmd = 'Snake' },
+          { name = 'Sudoku', cmd = 'Sudoku' },
+          { name = 'Tetris', cmd = 'Tetris' },
+          { name = 'Tower Defense', cmd = 'TdStart' },
+        }
+
+        local items = {}
+
+        for _, game in ipairs(games) do
+          table.insert(items, {
+            text = game.name,
+            value = game,
+          })
+        end
+
+        Snacks.picker {
+          title = '🎮 Games',
+          items = items,
+          format = 'text',
+          confirm = function(picker, item)
+            picker:close()
+            vim.cmd(item.value.cmd)
+          end,
+        }
+      end, {})
+    end,
+  },
+}

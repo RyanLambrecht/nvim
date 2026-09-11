@@ -152,14 +152,14 @@ vim.schedule(function()
     -- ── Standard LSP keymaps (mirror lspconfig.lua since jdtls bypasses LspAttach) ──
     map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
     map('gra', vim.lsp.buf.code_action, 'Code [A]ction', { 'n', 'x' })
-    map('grr', require('telescope.builtin').lsp_references, '[R]eferences')
-    map('gri', require('telescope.builtin').lsp_implementations, '[I]mplementations')
-    map('grd', require('telescope.builtin').lsp_definitions, '[D]efinition')
+    map('grr', Snacks.picker.lsp_references(), '[R]eferences')
+    map('gri', Snacks.picker.lsp_implementations(), '[I]mplementations')
+    map('grd', Snacks.picker.lsp_definitions(), '[D]efinition')
     map('grD', vim.lsp.buf.declaration, '[D]eclaration')
-    map('gO', require('telescope.builtin').lsp_document_symbols, 'Document Symbols')
-    map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace Symbols')
-    map('grt', require('telescope.builtin').lsp_type_definitions, '[T]ype Definition')
-    map('K', vim.lsp.buf.hover, 'Hover Documentation') -- FIX: was hover() not hover
+    map('gO', Snacks.picker.lsp_symbols(), 'Symbols')
+    map('gW', Snacks.picker.lsp_workspace_symbols(), 'Workspace Symbols')
+    map('grt', Snacks.picker.lsp_type_definitions(), '[T]ype Definition')
+    map('K', vim.lsp.buf.hover, 'Hover Documentation')
 
     -- ── Java-specific keymaps ──────────────────────────────────────────────────
 
