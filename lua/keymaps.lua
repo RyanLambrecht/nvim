@@ -29,13 +29,8 @@ vim.keymap.set('t', '<C-p>', '<Up>', { desc = 'Previous terminal command' })
 vim.keymap.set('t', '<C-n>', '<Down>', { desc = 'Next terminal command' })
 
 -- Neovim
-vim.keymap.set('n', '<leader>nr', function()
-  local session = vim.fn.stdpath 'state' .. '/restart_session.vim'
-  vim.cmd('mksession! ' .. vim.fn.fnameescape(session))
-  vim.cmd('restart source ' .. vim.fn.fnameescape(session))
-end, { desc = '[r]estart Neovim' })
 
-vim.keymap.set('n', '<leader>nR', ':restart<cr>', { desc = '[R]estart Neovim [hard]' })
+vim.keymap.set('n', '<leader>nr', ':restart!<cr>', { desc = '[r]estart!' })
 
 vim.keymap.set('n', '<leader>nc', function()
   local current = vim.api.nvim_get_current_buf()
@@ -50,10 +45,10 @@ end, { desc = '[c]lear other buffers' })
 vim.keymap.set('n', '<leader>nC', ':%bd<cr>', { desc = '[c]lear all buffers' })
 
 -- Misc
-vim.keymap.set('n', '<leader>Ts', function()
-  vim.opt.spell = not vim.opt.spell:get()
-  print('Spell check: ' .. (vim.opt.spell:get() and 'ON' or 'OFF'))
-end, { desc = 'Toggle spell check' })
+-- vim.keymap.set('n', '<leader>Ts', function()
+--   vim.opt.spell = not vim.opt.spell:get()
+--   print('Spell check: ' .. (vim.opt.spell:get() and 'ON' or 'OFF'))
+-- end, { desc = 'Toggle spell check' })
 
 vim.keymap.set('n', '<leader>R', function()
   local clients = vim.lsp.get_clients { bufnr = 0 }

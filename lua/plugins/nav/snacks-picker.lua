@@ -1,5 +1,13 @@
+-- snacks-picker.lua
 return {
   'folke/snacks.nvim',
+  lazy = false,
+  opts = {
+    picker = {
+      preview = false,
+      layout = {},
+    },
+  },
 
   keys = {
     {
@@ -181,6 +189,22 @@ return {
         Snacks.picker.options()
       end,
       desc = '[o]ptions',
+    },
+    {
+      '<leader>st',
+      function()
+        local cache = vim.fn.stdpath 'cache' .. '/tmux-manpage.txt'
+        if vim.fn.filereadable(cache) == 0 then
+          vim.fn.system('MANWIDTH=100 man tmux | col -bx > ' .. cache)
+        end
+        Snacks.picker.grep {
+          dirs = { vim.fn.stdpath 'cache' },
+          glob = 'tmux-manpage.txt',
+          title = 'Tmux Docs',
+          layout = { preset = 'ivy' },
+        }
+      end,
+      desc = 'Search Tmux docs',
     },
   },
 }

@@ -96,6 +96,7 @@ return {
   },
   {
     'https://github.com/scottmckendry/cyberdream.nvim',
+    lazy = true,
     config = function()
       require('cyberdream').setup {
         transparent = true,
@@ -107,6 +108,7 @@ return {
   },
   {
     'folke/tokyonight.nvim',
+    lazy = true,
     config = function()
       require('tokyonight').setup {
         transparent = true,
@@ -115,6 +117,7 @@ return {
   },
   {
     't184256/vim-boring',
+    lazy = true,
     dependencies = { 'rktjmp/lush.nvim' },
     config = function()
       vim.api.nvim_create_autocmd('ColorScheme', {
@@ -127,6 +130,7 @@ return {
   },
   {
     'ntk148v/komau.vim',
+    lazy = true,
     config = function()
       vim.api.nvim_create_autocmd('ColorScheme', {
         pattern = 'boring',

@@ -21,4 +21,4 @@ require('cursorline').setup()
 -- experimental ui
 
 require('vim._core.ui2').enable {}
---:help modeline if need
+-- --:help modeline if need

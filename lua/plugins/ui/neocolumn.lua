@@ -1,9 +1,8 @@
 return {
   'ecthelionvi/NeoColumn.nvim',
-
+  lazy = true,
   build = function(plugin)
     local patch = vim.fn.stdpath 'config' .. '/patches/NeoColumn.nvim.patch'
-
     if vim.fn.system {
       'git',
       '-C',

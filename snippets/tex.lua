@@ -4,17 +4,12 @@ local i = ls.insert_node
 local fmt = require('luasnip.extras.fmt').fmt
 
 return {
-  s('texln', {
-    t '$',
-    i(1, ''),
-    t '$',
-    i(2, ''),
-    t '  \n',
-  }),
   s('tex', {
     t '$',
     i(1, ''),
     t '$',
+    i(2, ''),
+    t '  ',
   }),
   s('pd', {
     t '\\partial ',
@@ -43,19 +38,19 @@ return {
   s('xor', {
     t '(+)',
   }),
-  s('sqrt', {
-    t '\\sqrt{',
-    i(1, ''),
-    t '}',
+  s('dm', {
+    t { '\\[', '  ' },
+    i(1),
+    t { '', '\\]' },
   }),
-  -- s('to', {
-  --   t '^{',
-  --   i(1, ''),
-  --   t '}',
-  -- }),
-  s('from', {
-    t '_{',
-    i(1, ''),
-    t '}',
+  s('dam', {
+    t { '\\[', '\\begin{aligned}', '  ' },
+    i(1),
+    t { '  ', '\\end{aligned}', '\\]' },
+  }),
+  s('aline', {
+    t { '& ' },
+    i(1),
+    t { ' \\\\' },
   }),
 }

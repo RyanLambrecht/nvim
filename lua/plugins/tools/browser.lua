@@ -1,9 +1,10 @@
 return {
   'aliqyan-21/wit.nvim',
+  keys = {
+    { '<leader>sb', ':WitSearch<CR>', mode = 'n', desc = '[B]rowser: Search' },
+    { '<leader>sb', ':WitSearchVisual<CR>', mode = 'v', desc = '[B]rowser: Search visual' },
+  },
   config = function()
     require('wit').setup()
-    vim.keymap.set('n', '<leader>sb', ':WitSearch<CR>', { desc = '[B]rowser: Search' })
-    vim.keymap.set('v', '<leader>sb', ':WitSearchVisual<CR>', { desc = '[B]rowser: Search visual' })
-    -- vim.keymap.set('n', '<leader>ww', ':WitSearchWiki<CR>', { desc = 'Web: Search Wikipedia' })
   end,
 }

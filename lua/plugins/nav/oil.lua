@@ -30,6 +30,17 @@ return {
       ['<C-l>'] = false,
       ['q'] = 'actions.close',
       ['<localleader>r'] = 'actions.refresh',
+      ['<localleader>o'] = {
+        callback = function()
+          local dir = require('oil').get_current_dir()
+          if not dir then
+            vim.notify('Oil: no current directory', vim.log.levels.WARN)
+            return
+          end
+          vim.fn.jobstart({ 'open', dir }, { detach = true })
+        end,
+        desc = 'Oil: open in Finder',
+      },
       ['<localleader>Y'] = 'actions.yank_entry',
       ['<localleader>y'] = {
         callback = function()

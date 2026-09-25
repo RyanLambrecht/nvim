@@ -4,6 +4,7 @@ return {
   init = function()
     vim.g.vimtex_mappings_prefix = '<localleader>'
     vim.g.vimtex_view_method = 'skim'
+    -- vim.g.vimtex_view_method = 'general' -- defaults to preview on mac, but has a issue where the pdf doesn't update until the window is given focus
     vim.g.vimtex_compiler_method = 'latexmk'
 
     -- Live preview compiles into a temp dir

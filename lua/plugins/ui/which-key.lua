@@ -55,20 +55,44 @@ return {
       local wk = require 'which-key'
       wk.setup(opts)
 
-      local enabled = true
+      -- which-key has no enable()/disable() API, but it reads `delay` from its
+      -- config every time it schedules the popup. Pushing the delay out of reach
+      -- keeps the popup from ever appearing (mappings still work normally),
+      -- and restoring the original delay brings it back.
+      local wk_config = require 'which-key.config'
+      local original_delay = opts.delay
+      local never = 2147483647 -- ms (~24 days)
 
+      -- Persistence: shada saves global variables that are ALL UPPERCASE
+      -- (requires '!' in 'shada', which is in Neovim's default). It's written on
+      -- exit and read before VimEnter, so it's available here. nil means "never
+      -- toggled", which counts as enabled.
+      local function is_enabled()
+        return vim.g.WHICH_KEY_ENABLED ~= false
+      end
+
+      local function apply(state)
+        wk_config.options.delay = state and original_delay or never
+      end
+
+      apply(is_enabled())
+
+      local toggle = Snacks.toggle.new {
+        id = 'which_key',
+        name = 'Which-Key',
+        get = is_enabled,
+        set = function(state)
+          vim.g.WHICH_KEY_ENABLED = state
+          apply(state)
+        end,
+      }
+
+      toggle:map '<leader>Tw'
+
+      -- optional: keep the command around
       vim.api.nvim_create_user_command('WhichKeyToggle', function()
-        if enabled then
-          wk.disable()
-          vim.notify('which-key disabled', vim.log.levels.INFO)
-        else
-          wk.enable()
-          vim.notify('which-key enabled', vim.log.levels.INFO)
-        end
-        enabled = not enabled
+        toggle:toggle()
       end, { desc = 'Toggle which-key' })
-
-      vim.keymap.set('n', '<leader>Tw', '<cmd>WhichKeyToggle<cr>', { desc = '[T]oggle [W]hich-Key' })
     end,
   },
 }

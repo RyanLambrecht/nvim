@@ -14,6 +14,7 @@ return {
         'go',
         'bash',
         'c',
+        'cpp',
         'diff',
         'html',
         'lua',

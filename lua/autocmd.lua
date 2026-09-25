@@ -1,6 +1,10 @@
--- Filetype-specific wrap behavior
+-- autocmd.lua
+-- Create a shared augroup to prevent duplicate autocmd triggers on config reload
+local config_group = vim.api.nvim_create_augroup('UserCustomConfig', { clear = true })
 
+-- 1. Filetype-specific wrap behavior
 vim.api.nvim_create_autocmd('FileType', {
+  group = config_group,
   pattern = {
     'c',
     'cpp',
@@ -20,118 +24,103 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- 2. LuaSnip LaTeX snippets setup
+-- Safely initialize snippets on markdown filetype without using 'once = true'
 vim.api.nvim_create_autocmd('FileType', {
+  group = config_group,
   pattern = { 'markdown' },
   callback = function()
-    require('luasnip-latex-snippets').setup { use_treesitter = true }
-  end,
-  once = true, -- only register snippets once
-})
-
--- makes pdf of markdown or latex file in buffer
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'markdown', 'tex' },
-  callback = function()
-    vim.keymap.set('n', '<localleader>rp', function()
-      local file = vim.fn.expand '%:p'
-      local out = '/tmp/' .. vim.fn.expand '%:t:r' .. '.pdf'
-      vim.fn.jobstart({ 'pandoc', file, '-o', out, '--pdf-engine=xelatex' }, {
-        on_exit = function(_, code)
-          if code == 0 then
-            vim.fn.jobstart { 'open', out }
-          else
-            vim.notify('Pandoc failed', vim.log.levels.ERROR)
-          end
-        end,
-      })
-    end, { buffer = true, desc = 'Preview as PDF (tmp)' })
-
-    vim.keymap.set('n', '<localleader>rP', function()
-      local file = vim.fn.expand '%:p'
-      local out = vim.fn.expand '%:p:r' .. '.pdf'
-      vim.fn.jobstart({ 'pandoc', file, '-o', out, '--pdf-engine=xelatex' }, {
-        on_exit = function(_, code)
-          if code == 0 then
-            vim.fn.jobstart { 'open', out }
-          else
-            vim.notify('Pandoc failed', vim.log.levels.ERROR)
-          end
-        end,
-      })
-    end, { buffer = true, desc = 'Preview as PDF (same dir)' })
-  end,
-})
--- makes pdf of markdown or latex file in buffer
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = { 'markdown', 'tex' },
---   callback = function()
---     vim.keymap.set('n', '<localleader>rp', function()
---       local file = vim.fn.expand '%:p'
---       local out = '/tmp/' .. vim.fn.expand '%:t:r' .. '.pdf'
---       vim.fn.jobstart({ 'pandoc', file, '-o', out, '--pdf-engine=xelatex' }, {
---         on_exit = function(_, code)
---           if code == 0 then
---             vim.fn.jobstart { 'open', out }
---           else
---             vim.notify('Pandoc failed', vim.log.levels.ERROR)
---           end
---         end,
---       })
---     end, { buffer = true, desc = 'Preview as PDF (tmp)' })
---
---     vim.keymap.set('n', '<localleader>rP', function()
---       local file = vim.fn.expand '%:p'
---       local out = vim.fn.expand '%:p:r' .. '.pdf'
---       vim.fn.jobstart({ 'pandoc', file, '-o', out, '--pdf-engine=xelatex' }, {
---         on_exit = function(_, code)
---           if code == 0 then
---             vim.fn.jobstart { 'open', out }
---           else
---             vim.notify('Pandoc failed', vim.log.levels.ERROR)
---           end
---         end,
---       })
---     end, { buffer = true, desc = 'Preview as PDF (same dir)' })
---   end,
--- })
-
--- gets rid of airline attatching itself to floating buf
-vim.api.nvim_create_autocmd('WinEnter', {
-  callback = function()
-    local win = vim.api.nvim_get_current_win()
-    if vim.api.nvim_win_get_config(win).relative ~= '' then
-      vim.defer_fn(function()
-        if vim.api.nvim_win_is_valid(win) then
-          vim.wo[win].statusline = ' '
-        end
-      end, 10)
+    local ok, luasnip_latex = pcall(require, 'luasnip-latex-snippets')
+    if ok then
+      luasnip_latex.setup { use_treesitter = true }
     end
   end,
 })
 
--- Highlight on yank
+-- 3. PDF compilation for Markdown / LaTeX
+vim.api.nvim_create_autocmd('FileType', {
+  group = config_group,
+  pattern = { 'markdown', 'tex' },
+  callback = function()
+    -- Cross-platform system opener detection (macOS vs. Linux/WSL)
+    local opener = vim.fn.has 'mac' == 1 and 'open' or 'xdg-open'
+
+    local function render_pdf(out)
+      local file = vim.fn.expand '%:p'
+      local stderr_lines = {}
+
+      vim.fn.jobstart({ 'pandoc', file, '-o', out, '--pdf-engine=xelatex' }, {
+        stderr_buffered = true,
+        on_stderr = function(_, data)
+          if data then
+            for _, line in ipairs(data) do
+              if line ~= '' then
+                table.insert(stderr_lines, line)
+              end
+            end
+          end
+        end,
+        on_exit = function(_, code)
+          if code == 0 then
+            vim.fn.jobstart { opener, out }
+          else
+            local msg = table.concat(stderr_lines, '\n')
+            vim.notify('Pandoc failed:\n' .. msg, vim.log.levels.ERROR)
+          end
+        end,
+      })
+    end
+
+    vim.keymap.set('n', '<localleader>rp', function()
+      render_pdf('/tmp/' .. vim.fn.expand '%:t:r' .. '.pdf')
+    end, { buffer = true, desc = 'Preview as PDF (tmp)' })
+
+    vim.keymap.set('n', '<localleader>rP', function()
+      render_pdf(vim.fn.expand '%:p:r' .. '.pdf')
+    end, { buffer = true, desc = 'Preview as PDF (same dir)' })
+  end,
+})
+
+-- 4. Statusline override for non-picker floating windows
+-- Excludes prompt / picker buffers to avoid breaking UI height calculations in snacks.picker
+vim.api.nvim_create_autocmd('WinEnter', {
+  group = config_group,
+  callback = function()
+    local win = vim.api.nvim_get_current_win()
+    local config = vim.api.nvim_win_get_config(win)
+
+    if config.relative ~= '' then
+      local buf = vim.api.nvim_win_get_buf(win)
+      local buftype = vim.bo[buf].buftype
+
+      -- Avoid mutating prompt windows, pickers, or floating inputs
+      if buftype ~= 'prompt' and buftype ~= 'nofile' then
+        vim.wo[win].statusline = ' '
+      end
+    end
+  end,
+})
+
+-- 5. Highlight on yank
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  group = config_group,
   callback = function()
     vim.hl.on_yank()
   end,
 })
 
--- Toggle a single‑column color column (80 chars by default)
+-- 6. Buffer-local color column toggle
 local function toggle_colorcol()
-  -- Grab the current global value – it can be a comma‑separated list as well.
-  local cur_cc = vim.opt.colorcolumn:get()
+  local cur_cc = vim.opt_local.colorcolumn:get()
 
-  -- If the option is empty or nil → no column → turn it on.
-  if cur_cc == '' or cur_cc == nil then
-    vim.opt.colorcolumn = '80' -- change the number if you prefer something else
+  if #cur_cc == 0 then
+    vim.opt_local.colorcolumn = '80'
     vim.notify('Color column enabled (80)', vim.log.levels.INFO)
   else
-    vim.opt.colorcolumn = '' -- clear the option → turn it off
+    vim.opt_local.colorcolumn = ''
     vim.notify('Color column disabled', vim.log.levels.INFO)
   end
 end
 
--- Normal‑mode mapping: <leader>cc  (you can pick any key‑combo you like)
-vim.keymap.set('n', '<leader>Tc', toggle_colorcol, { desc = 'Toggle color column (80) – <leader>cc' })
+vim.keymap.set('n', '<leader>Tc', toggle_colorcol, { desc = 'Toggle color column (80)' })
