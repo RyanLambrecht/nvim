@@ -289,17 +289,19 @@ return {
       }
 
       -- sourcekit-lsp for Swift (not managed by mason, ships with Xcode)
-      vim.lsp.config('sourcekit', {
-        capabilities = capabilities,
-        filetypes = { 'swift', 'objc', 'objcpp' },
-        root_dir = function(fname)
-          local package_swift = require('lspconfig.util').root_pattern 'Package.swift'(fname)
-          local git_root = vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
-          return package_swift or git_root
-        end,
-        cmd = { vim.trim(vim.fn.system 'xcrun -f sourcekit-lsp') },
-      })
-      vim.lsp.enable 'sourcekit'
+      if vim.fn.has 'mac' == 1 then
+        vim.lsp.config('sourcekit', {
+          capabilities = capabilities,
+          filetypes = { 'swift', 'objc', 'objcpp' },
+          root_dir = function(fname)
+            local package_swift = require('lspconfig.util').root_pattern 'Package.swift'(fname)
+            local git_root = vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
+            return package_swift or git_root
+          end,
+          cmd = { vim.trim(vim.fn.system 'xcrun -f sourcekit-lsp') },
+        })
+        vim.lsp.enable 'sourcekit'
+      end
     end,
   },
 }

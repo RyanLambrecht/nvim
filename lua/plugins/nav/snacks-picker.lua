@@ -1,4 +1,5 @@
 -- snacks-picker.lua
+local dirs = require 'dirs'
 return {
   'folke/snacks.nvim',
   lazy = false,

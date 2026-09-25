@@ -2,30 +2,38 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     branch = 'main',
-    build = ':TSUpdate',
+    build = function()
+      if vim.fn.executable 'tree-sitter' == 1 then
+        vim.cmd 'TSUpdate'
+      end
+    end,
     config = function()
       require('nvim-treesitter').setup {
         install_dir = vim.fn.stdpath 'data' .. '/nvim-treesitter',
       }
 
-      require('nvim-treesitter').install {
-        'python',
-        'java',
-        'go',
-        'bash',
-        'c',
-        'cpp',
-        'diff',
-        'html',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
-        'query',
-        'vim',
-        'vimdoc',
-        'latex',
-      }
+      if vim.fn.executable 'tree-sitter' == 1 then
+        require('nvim-treesitter').install {
+          'python',
+          'java',
+          'go',
+          'bash',
+          'c',
+          'cpp',
+          'diff',
+          'html',
+          'lua',
+          'luadoc',
+          'markdown',
+          'markdown_inline',
+          'query',
+          'vim',
+          'vimdoc',
+          'latex',
+        }
+      else
+        vim.notify('tree-sitter CLI not found, skipping parser install', vim.log.levels.WARN)
+      end
 
       -- Highlight via FileType autocmd
       vim.api.nvim_create_autocmd('FileType', {

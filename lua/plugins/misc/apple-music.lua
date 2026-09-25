@@ -1,5 +1,6 @@
 return {
   'p5quared/apple-music.nvim',
+  cond = vim.fn.has 'mac' == 1,
   -- Optional dependencies (install one of the supported pickers, e.g., 'nvim-telescope/telescope.nvim' for Telescope or 'ibhagwan/fzf-lua' for fzf-based picker)
   lazy = true,
   dependencies = {
