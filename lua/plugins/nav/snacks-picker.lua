@@ -112,7 +112,7 @@ return {
       '<leader>sN',
       function()
         Snacks.picker.files {
-          cwd = '~/notes/',
+          cwd = dirs.notes,
         }
       end,
       desc = '[S]earch [N]otes files',
@@ -122,7 +122,7 @@ return {
       '<leader>sn',
       function()
         Snacks.picker.files {
-          cwd = '~/notes/',
+          cwd = dirs.notes,
           finder = 'files',
           args = { '--type', 'd' },
           title = 'Search note directories',
@@ -135,7 +135,7 @@ return {
       '<leader>sP',
       function()
         Snacks.picker.files {
-          cwd = '~/code/',
+          cwd = dirs.code,
           finder = 'files',
           args = { '--type', 'd' },
           title = 'Search Projects',
@@ -148,7 +148,7 @@ return {
       '<leader>sv',
       function()
         Snacks.picker.files {
-          cwd = '~/dev/',
+          cwd = dirs.dev,
           finder = 'files',
           args = { '--type', 'd', '--max-depth', '2', '--min-depth', '1' },
           title = 'Search Projects',
@@ -162,7 +162,7 @@ return {
       '<leader>sp',
       function()
         Snacks.picker.files {
-          cwd = '~/code/',
+          cwd = dirs.code,
           finder = 'files',
           args = { '--type', 'd', '--max-depth', '2', '--min-depth', '2' },
           title = 'Search Projects',

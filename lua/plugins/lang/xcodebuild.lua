@@ -1,5 +1,6 @@
 return {
   'wojciech-kulik/xcodebuild.nvim',
+  cond = vim.fn.has 'mac' == 1,
   ft = { 'swift' },
   dependencies = {
     'MunifTanjim/nui.nvim',
