@@ -83,9 +83,11 @@ return {
           text = { inherit_defaults = true, 'buffer' },
         },
         providers = {
-          snippets = { score_offset = 10 },
-          buffer = { score_offset = -10 },
           lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink', score_offset = 100 },
+          lsp = { score_offset = 0 },
+          path = { score_offset = 3 },
+          snippets = { score_offset = -3 },
+          buffer = { score_offset = -10 },
         },
       },
 
