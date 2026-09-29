@@ -22,9 +22,28 @@ vim.keymap.set('n', '<M-Up>', '5<C-w>+', { desc = 'Resize split up' })
 vim.keymap.set('n', '<M-Down>', '5<C-w>-', { desc = 'Resize split down' })
 
 -- Terminal
-vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
-vim.keymap.set('t', '<C-[>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+-- OLD (kickstart defaults). <Esc><Esc> alongside <Esc> made nvim wait `timeoutlen`
+-- after every Esc, which caused the exit-terminal-mode delay inside tmux.
+-- vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
+-- vim.keymap.set('t', '<C-[>', [[<C-\><C-n>]], { desc = 'Exit terminal mode' })
+-- vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- NEW: single <Esc> that passes through to TUIs that need it (lazygit, fzf, ...)
+-- and exits terminal mode everywhere else. <C-\><C-n> always works as a manual escape hatch.
+-- <C-[> mapping removed: it is the same byte as <Esc> in most terminals, so keeping it
+-- would defeat the passthrough.
+local esc_passthrough = { 'lazygit', 'fzf', 'nvim', 'vim', 'htop', 'btop' }
+
+vim.keymap.set('t', '<Esc>', function()
+  local name = vim.api.nvim_buf_get_name(0) -- e.g. term://~/proj//1234:lazygit
+  for _, prog in ipairs(esc_passthrough) do
+    if name:match(':' .. prog) then
+      return '<Esc>' -- send a real Esc to the program
+    end
+  end
+  return '<C-\\><C-n>'
+end, { expr = true, desc = 'Exit terminal mode (Esc passes through to TUIs)' })
+
 vim.keymap.set('t', '<C-p>', '<Up>', { desc = 'Previous terminal command' })
 vim.keymap.set('t', '<C-n>', '<Down>', { desc = 'Next terminal command' })
 
