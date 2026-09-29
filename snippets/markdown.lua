@@ -1,7 +1,8 @@
 local ls = require 'luasnip'
 local s = ls.snippet
+local t = ls.text_node
 local i = ls.insert_node
-local fmt = require('luasnip.extras.fmt').fmt
+--local fmt = require('luasnip.extras.fmt').fmt
 
 return {
   s('texln', {
@@ -10,11 +11,6 @@ return {
     t '$',
     i(2, ''),
     t '  ',
-  }),
-  s('tex', {
-    t '$',
-    i(1, ''),
-    t '$',
   }),
   s('pd', {
     t '\\partial ',
@@ -25,34 +21,6 @@ return {
   s('iiint', {
     t '\\iiint_E ',
   }),
-  s('tf', {
-    t '∴',
-  }),
-  s('fa', {
-    t '∀',
-  }),
-  s('ex', {
-    t '∃',
-  }),
-  s('fa', {
-    t '∀',
-  }),
-  s('in', {
-    t '∈',
-  }),
-  s('xor', {
-    t '(+)',
-  }),
-  s('sqrt', {
-    t '\\sqrt{',
-    i(1, ''),
-    t '}',
-  }),
-  -- s('to', {
-  --   t '^{',
-  --   i(1, ''),
-  --   t '}',
-  -- }),
   s('from', {
     t '_{',
     i(1, ''),

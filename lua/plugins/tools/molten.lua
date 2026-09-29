@@ -10,11 +10,11 @@ return {
     vim.g.molten_auto_open_output = false
   end,
   keys = {
-    { '<leader>mi', ':MoltenInit<CR>', desc = 'Init Molten kernel' },
-    { '<leader>me', ':MoltenEvaluateOperator<CR>', desc = 'Evaluate operator' },
-    { '<leader>ml', ':MoltenEvaluateLine<CR>', desc = 'Evaluate line' },
-    { '<leader>mc', ':MoltenReevaluateCell<CR>', desc = 'Re-eval cell' },
-    { '<leader>mo', ':MoltenShowOutput<CR>', desc = 'Show output' },
+    { '<localleader>mi', ':MoltenInit<CR>', desc = 'Init Molten kernel' },
+    { '<localleader>me', ':MoltenEvaluateOperator<CR>', desc = 'Evaluate operator' },
+    { '<localleader>ml', ':MoltenEvaluateLine<CR>', desc = 'Evaluate line' },
+    { '<localleader>mc', ':MoltenReevaluateCell<CR>', desc = 'Re-eval cell' },
+    { '<localleader>mo', ':MoltenShowOutput<CR>', desc = 'Show output' },
   },
 }
 

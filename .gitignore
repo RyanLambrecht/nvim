@@ -1,6 +1,13 @@
 tags
 test.sh
 .luarc.json
+.env
+*.key
+*.pem
+*.log
+.nvim/
+.DS_Store
+.luad
 
 spell/
 lazy-lock.json
