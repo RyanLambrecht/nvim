@@ -1,3 +1,5 @@
+vim.loader.enable()
+
 if vim.fn.getcwd() == '~' or vim.fn.getcwd() == vim.env.HOME then
   vim.cmd.cd(vim.fn.expand '~')
 end
@@ -16,7 +18,8 @@ require 'lazy-plugins'
 require 'autocmd'
 
 -- custom
-require('cursorline').setup()
+require('custom.cursorline').setup()
+require('custom.dynamic-theme').apply_saved_theme()
 
 -- experimental ui
 

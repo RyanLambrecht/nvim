@@ -1,4 +1,5 @@
 -- https://github.com/nvim-neo-tree/neo-tree.nvim
+---@type LazySpec
 return {
   lazy = true,
   'nvim-neo-tree/neo-tree.nvim',

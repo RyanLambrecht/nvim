@@ -1,24 +1,14 @@
+---@type LazySpec
 return {
   'ThePrimeagen/harpoon',
-  lazy = true,
   branch = 'harpoon2',
-  dependencies = {
-    { 'nvim-lua/plenary.nvim', lazy = true },
-  },
-
-  config = function()
-    require('harpoon'):setup()
-  end,
 
   keys = function()
-    local harpoon = require 'harpoon'
-
     local function list()
-      return harpoon:list()
+      return require('harpoon'):list()
     end
 
     return {
-      -- core actions
       {
         '<leader>ja',
         function()
@@ -43,12 +33,11 @@ return {
       {
         '<leader>jj',
         function()
-          harpoon.ui:toggle_quick_menu(list())
+          require('harpoon').ui:toggle_quick_menu(list())
         end,
         desc = 'Harpoon: menu',
       },
 
-      -- direct navigation
       {
         '<leader>j1',
         function()
@@ -78,7 +67,6 @@ return {
         desc = 'Harpoon: file 4',
       },
 
-      -- sequential navigation
       {
         '<C-n>',
         function()
@@ -94,7 +82,6 @@ return {
         desc = 'Harpoon: prev file',
       },
 
-      -- snacks integration
       {
         '<leader>sj',
         function()
@@ -117,4 +104,8 @@ return {
       },
     }
   end,
+
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+  },
 }

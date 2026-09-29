@@ -1,4 +1,5 @@
 -- lua/plugins/ui/snacks-dashboard.lua
+---@type LazySpec
 return {
   'folke/snacks.nvim',
   priority = 1000,
@@ -49,7 +50,8 @@ return {
               Snacks.picker.files {
                 cwd = '~/code/',
                 finder = 'files',
-                args = { '--type', 'd', '--max-depth', '2', '--min-depth', '2' },
+                --args = { '--type', 'd', '--max-depth', '2', '--min-depth', '2' },
+                args = { '--type', 'd' },
                 title = 'Search Projects',
                 -- preview = false,
               }

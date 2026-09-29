@@ -1,4 +1,5 @@
 -- lua/plugins/ui/snacks-toggles.lua
+---@type LazySpec
 return {
   'folke/snacks.nvim',
 
@@ -20,6 +21,9 @@ return {
             on = '80',
           })
           :map '<leader>Tc'
+
+        Snacks.toggle.zen():map '<leader>Tz'
+        Snacks.toggle.zoom():map '<leader>TZ'
       end,
     })
   end,

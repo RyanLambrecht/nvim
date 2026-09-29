@@ -1,10 +1,12 @@
+---@type LazySpec
 return {
   'nvim-lualine/lualine.nvim',
+  event = 'VeryLazy',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
-    local clock = function()
-      return os.date '%H:%M'
-    end
+    -- local clock = function()
+    --   return os.date '%H:%M'
+    -- end
 
     require('lualine').setup {
       options = {
@@ -25,7 +27,7 @@ return {
         lualine_c = { 'filename' },
         lualine_x = { 'encoding', 'filetype' },
         lualine_y = { 'progress' },
-        lualine_z = { 'location', clock },
+        -- lualine_z = { 'location', clock },
       },
       inactive_sections = {
         lualine_a = {},
@@ -36,7 +38,7 @@ return {
         lualine_z = {},
       },
       -- explicitly exclude floats
-      extensions = {},
+      extensions = { 'oil', 'neo-tree', 'toggleterm', 'nvim-dap-ui', 'lazy', 'mason', 'quickfix' },
     }
   end,
 }

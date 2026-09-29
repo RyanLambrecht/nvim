@@ -1,13 +1,14 @@
 return {
   { -- Autocompletion
     'saghen/blink.cmp',
-    event = 'InsertEnter',
+    lazy = true,
     version = '1.*',
     dependencies = {
       -- Snippet Engine
       {
         'L3MON4D3/LuaSnip',
-        version = '2.*',
+        version = '1.*',
+        lazy = true,
         build = (function()
           -- Build Step is needed for regex support in snippets.
           -- This step is not supported in many windows environments.
@@ -30,7 +31,6 @@ return {
         },
         opts = {},
       },
-      'folke/lazydev.nvim',
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
@@ -68,30 +68,36 @@ return {
         -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = 'mono',
       },
-
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        --documentation = { auto_show = true, auto_show_delay_ms = 500 },
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' }, --removed for conflicts
+        default = { 'lsp', 'path', 'snippets' },
+        per_filetype = {
+          lua = { inherit_defaults = true, 'lazydev' },
+          -- word completion from the current buffer for notes
+          markdown = { inherit_defaults = true, 'buffer' },
+          text = { inherit_defaults = true, 'buffer' },
+        },
         providers = {
-          lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink', score_offset = 100 },
         },
       },
 
       snippets = { preset = 'luasnip' },
 
-      -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
-      -- which automatically downloads a prebuilt binary when enabled.
+      -- Blink.cmp includes a rust fuzzy matcher (faster and typo resistant).
+      -- With `version = '1.*'` above, lazy.nvim checks out a release tag, so a
+      -- prebuilt binary is downloaded automatically.
       --
-      -- By default, we use the Lua implementation instead, but you may enable
-      -- the rust implementation via `'prefer_rust_with_warning'`
+      -- 'prefer_rust_with_warning' falls back to the Lua implementation and
+      -- warns if the binary is unavailable. Use 'lua' to force the Lua one.
       --
       -- See :h blink-cmp-config-fuzzy for more information
-      fuzzy = { implementation = 'lua' },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },

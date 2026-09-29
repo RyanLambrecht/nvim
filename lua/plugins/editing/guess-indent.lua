@@ -1,1 +1,2 @@
-return { 'NMAC427/guess-indent.nvim', config = function() end }
+---@type LazySpec
+return { 'NMAC427/guess-indent.nvim', event = { 'BufReadPost' }, config = function() end }

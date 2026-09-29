@@ -1,6 +1,6 @@
+---@type LazySpec
 return {
   'coffebar/transfer.nvim',
-  lazy = true,
   cmd = { 'TransferInit', 'DiffRemote', 'TransferUpload', 'TransferDownload', 'TransferDirDiff', 'TransferRepeat' },
   keys = {
     { '<leader>ru', '<cmd>TransferUpload<cr>', desc = 'Remote: upload' },

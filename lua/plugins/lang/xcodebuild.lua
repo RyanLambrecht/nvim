@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   'wojciech-kulik/xcodebuild.nvim',
   cond = vim.fn.has 'mac' == 1,

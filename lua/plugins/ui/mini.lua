@@ -1,7 +1,8 @@
+---@type LazySpec
 return {
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
-    lazy = true,
+    lazy = false,
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -16,7 +17,15 @@ return {
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      require('mini.surround').setup { silent = true }
+
+      require('mini.map').setup {
+        window = {
+          show_integration = true,
+          width = 10,
+        },
+      }
+      vim.keymap.set('n', '<leader>nm', MiniMap.toggle, { desc = '[m]inimap' })
 
       -- Sessions: save and restore your open files, splits, and cursor positions
       --

@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   'willyelm/pulse.nvim',
   lazy = true,

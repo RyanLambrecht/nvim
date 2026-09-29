@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   'p5quared/apple-music.nvim',
   cond = vim.fn.has 'mac' == 1,

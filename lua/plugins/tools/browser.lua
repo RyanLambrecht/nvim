@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   'aliqyan-21/wit.nvim',
   keys = {

@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   { -- Autoformat
     'stevearc/conform.nvim',
@@ -39,6 +40,7 @@ return {
         json = { 'fixjson' },
         go = { 'goimports' },
         sh = { 'shfmt' },
+        python = { 'ruff_format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

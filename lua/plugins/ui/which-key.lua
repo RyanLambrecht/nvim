@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   {
     'folke/which-key.nvim',
@@ -49,6 +50,7 @@ return {
         { '<leader>n', group = '[n]eovim' },
         { '<leader>ms', group = '[s]earch' },
         { '<leader>ns', group = '[s]ession' },
+        { '<leader>o', group = '[o]pen dir' },
       },
     },
     config = function(_, opts)

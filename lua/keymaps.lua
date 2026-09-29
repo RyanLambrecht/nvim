@@ -49,6 +49,9 @@ vim.keymap.set('n', '<leader>nC', ':%bd<cr>', { desc = '[c]lear all buffers' })
 --   vim.opt.spell = not vim.opt.spell:get()
 --   print('Spell check: ' .. (vim.opt.spell:get() and 'ON' or 'OFF'))
 -- end, { desc = 'Toggle spell check' })
+--
+
+vim.keymap.set('n', '<leader>od', ':vs ~/Downloads/<CR>', { desc = 'Downloads' })
 
 vim.keymap.set('n', '<leader>R', function()
   local clients = vim.lsp.get_clients { bufnr = 0 }
@@ -91,5 +94,9 @@ vim.keymap.set('n', '<leader>F', function()
   vim.bo[new_buf].modifiable = false
 end, { desc = 'Float: move to split' })
 
+--TODO: turn this into a snippet, its old and before you knew how to config
 -- easy insert & for matrix
-vim.keymap.set('i', '<C-e>', '& ', { desc = 'insert space for matrix' })
+-- vim.keymap.set('i', '<C-e>', '& ', { desc = 'insert space for matrix' })
+
+vim.keymap.set('v', '<leader>p', '"_dP', { desc = 'Paste keep register' })
+vim.keymap.set('v', '<leader>d', '"_d', { desc = 'Delete keep register' })

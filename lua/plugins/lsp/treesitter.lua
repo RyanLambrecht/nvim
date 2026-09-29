@@ -5,6 +5,7 @@ if has_ts_cli then
   return {
     {
       'nvim-treesitter/nvim-treesitter',
+      event = { 'BufReadPost', 'BufNewFile' },
       branch = 'main',
       build = ':TSUpdate',
       config = function()
@@ -53,6 +54,7 @@ else
   return {
     {
       'nvim-treesitter/nvim-treesitter',
+      event = { 'BufReadPost', 'BufNewFile' },
       branch = 'master',
       build = ':TSUpdate',
       config = function()

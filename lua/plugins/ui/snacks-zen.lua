@@ -1,13 +1,21 @@
--- lazy.nvim
-
+---@type LazySpec
 return {
   'folke/snacks.nvim',
-  ---@type snacks.Config
   opts = {
     zen = {
-      -- your zen configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
+      toggles = {
+        dim = true,
+        git_signs = false,
+        mini_diff_signs = false,
+        diagnostics = true, -- leave diagnostics alone
+        inlay_hints = true,
+      },
+      center = false, -- center the window
+      show = {
+        statusline = false, -- can only be shown when using the global statusline
+        tabline = false,
+      },
+      win = { style = 'zen', width = 120, col = 0 },
     },
   },
 }

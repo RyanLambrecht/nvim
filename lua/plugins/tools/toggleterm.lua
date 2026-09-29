@@ -62,6 +62,7 @@ return {
       -- <leader>t namespace: terminal-specific actions
       -- Keybinding: toggle terminal
       { '<leader>tt', '<cmd>ToggleTerm<CR>', desc = 'Toggle [t]erminal' },
+      { '<C-_>', '<cmd>ToggleTerm<CR>', desc = 'which_key_ignore' }, -- just to support tmux, idk why it work tbh
       { '<C-/>', '<cmd>ToggleTerm<CR>', desc = 'Toggle [t]erminal' },
 
       -- opens terminal at the current dir in current buffer

@@ -71,3 +71,6 @@ function _G.NoCloseTabline()
   end
   return s .. '%#TabLineFill#'
 end
+
+-- venv for python
+vim.g.python3_host_prog = vim.fn.expand '~/.venvs/nvim/bin/python3'

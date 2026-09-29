@@ -1,5 +1,6 @@
 -- snacks-picker.lua
 local dirs = require 'dirs'
+---@type LazySpec
 return {
   'folke/snacks.nvim',
   lazy = false,
@@ -14,7 +15,14 @@ return {
     {
       '<leader>sh',
       function()
-        Snacks.picker.help()
+        Snacks.picker.help {
+          confirm = function(picker, item)
+            picker:close()
+            if item then
+              vim.cmd('vertical help ' .. item.text)
+            end
+          end,
+        }
       end,
       desc = '[S]earch [H]elp',
     },
@@ -97,7 +105,6 @@ return {
       end,
       desc = '[S]earch [/] in Open Files',
     },
-
     {
       '<leader>sC',
       function()
@@ -107,7 +114,16 @@ return {
       end,
       desc = '[S]earch neovim [C]onfig files',
     },
-
+    {
+      '<leader>sc',
+      function()
+        Snacks.picker.files {
+          cwd = vim.fn.stdpath 'config',
+          args = { '--type', 'd' },
+        }
+      end,
+      desc = 'which_key_ignore',
+    },
     {
       '<leader>sN',
       function()
@@ -151,13 +167,11 @@ return {
           cwd = dirs.dev,
           finder = 'files',
           args = { '--type', 'd', '--max-depth', '2', '--min-depth', '1' },
-          title = 'Search Projects',
-          preview = false,
+          title = 'Search Dev',
         }
       end,
       desc = '[S]earch de[v] directories',
     },
-
     {
       '<leader>sp',
       function()
@@ -166,7 +180,6 @@ return {
           finder = 'files',
           args = { '--type', 'd', '--max-depth', '2', '--min-depth', '2' },
           title = 'Search Projects',
-          preview = false,
         }
       end,
       desc = '[S]earch [p]roject directories',
@@ -178,18 +191,9 @@ return {
         Snacks.picker.files {
           finder = 'files',
           args = { '--type', 'd' },
-          preview = false,
         }
       end,
       desc = '[S]earch [d]irectories',
-    },
-
-    {
-      '<leader>so',
-      function()
-        Snacks.picker.options()
-      end,
-      desc = '[o]ptions',
     },
     {
       '<leader>st',
