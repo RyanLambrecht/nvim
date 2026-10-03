@@ -9,6 +9,7 @@ return {
   ---@module 'render-markdown'
   ---@type render.md.UserConfig
   opts = {
+    opts = { file_types = { 'markdown', 'latex', 'tex', 'copilot-chat' } },
     latex = {
       enabled = true,
       converter = 'pylatexenc',

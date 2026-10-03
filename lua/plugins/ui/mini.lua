@@ -17,7 +17,18 @@ return {
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup { silent = true }
+      require('mini.surround').setup {
+        silent = true,
+        mappings = {
+          add = 'gsa', -- add surrounding (normal + visual)
+          delete = 'gsd',
+          find = 'gsf', -- find to the right
+          find_left = 'gsF', -- find to the left
+          highlight = 'gsh',
+          replace = 'gsr',
+          update_n_lines = 'gsn',
+        },
+      }
 
       require('mini.map').setup {
         window = {

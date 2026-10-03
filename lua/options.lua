@@ -74,3 +74,6 @@ end
 
 -- venv for python
 vim.g.python3_host_prog = vim.fn.expand '~/.venvs/nvim/bin/python3'
+
+-- switch :grep to use ripgrep
+vim.opt.grepprg = 'rg --vimgrep --smart-case'

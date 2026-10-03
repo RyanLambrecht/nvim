@@ -1,3 +1,14 @@
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'oil',
+  callback = function(a)
+    local name = vim.api.nvim_buf_get_name(a.buf)
+    vim.fn.writefile({
+      ('buf=%d name=%s startreason=%s'):format(a.buf, name, vim.v.startreason),
+      debug.traceback('', 2),
+      '',
+    }, '/tmp/ft.log', 'a')
+  end,
+})
 vim.loader.enable()
 
 if vim.fn.getcwd() == '~' or vim.fn.getcwd() == vim.env.HOME then

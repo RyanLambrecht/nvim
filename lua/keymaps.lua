@@ -34,6 +34,15 @@ vim.keymap.set('n', '<M-Down>', '5<C-w>-', { desc = 'Resize split down' })
 -- would defeat the passthrough.
 local esc_passthrough = { 'lazygit', 'fzf', 'nvim', 'vim', 'htop', 'btop' }
 
+vim.keymap.set('t', '<C-/>', function()
+  local name = vim.api.nvim_buf_get_name(0) -- e.g. term://~/proj//1234:lazygit
+  for _, prog in ipairs(esc_passthrough) do
+    if name:match(':' .. prog) then
+      return '<Esc>' -- send a real Esc to the program
+    end
+  end
+  return '<C-\\><C-n>'
+end, { expr = true, desc = 'Exit terminal mode (Esc passes through to TUIs)' })
 vim.keymap.set('t', '<Esc>', function()
   local name = vim.api.nvim_buf_get_name(0) -- e.g. term://~/proj//1234:lazygit
   for _, prog in ipairs(esc_passthrough) do
@@ -119,3 +128,11 @@ end, { desc = 'Float: move to split' })
 
 vim.keymap.set('v', '<leader>p', '"_dP', { desc = 'Paste keep register' })
 vim.keymap.set('v', '<leader>d', '"_d', { desc = 'Delete keep register' })
+
+-- make it so that <C-w>d puts cursor into diagnostic  with a single stroke
+vim.keymap.set('n', '<C-w>D', function()
+  local _, win = vim.diagnostic.open_float()
+  if win then
+    vim.api.nvim_set_current_win(win)
+  end
+end, { desc = 'Diagnostic float (focus)' })

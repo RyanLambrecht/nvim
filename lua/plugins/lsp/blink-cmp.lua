@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   { -- Autocompletion
     'saghen/blink.cmp',
@@ -72,15 +73,16 @@ return {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         --documentation = { auto_show = true, auto_show_delay_ms = 500 },
+        --    ghost_text = { enabled = true },
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets' },
+        default = { 'lsp', 'path', 'snippets' }, --'copilot'
         per_filetype = {
           lua = { inherit_defaults = true, 'lazydev' },
           -- word completion from the current buffer for notes
-          markdown = { inherit_defaults = true, 'buffer' },
-          text = { inherit_defaults = true, 'buffer' },
+          --markdown = { inherit_defaults = true, 'buffer' },
+          --text = { inherit_defaults = true, 'buffer' },
         },
         providers = {
           lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink', score_offset = 100 },
@@ -88,6 +90,12 @@ return {
           path = { score_offset = 3 },
           snippets = { score_offset = -3 },
           buffer = { score_offset = -10 },
+          -- copilot = {
+          --   name = 'copilot',
+          --   module = 'blink-copilot',
+          --   score_offset = 100,
+          --   async = true,
+          -- },
         },
       },
 
@@ -104,7 +112,10 @@ return {
       fuzzy = { implementation = 'prefer_rust_with_warning' },
 
       -- Shows a signature help window while you type arguments for a function
-      signature = { enabled = true },
+      signature = {
+        enabled = true,
+        trigger = { show_on_accept = true }, -- pops up right after accepting a completion
+      },
     },
   },
 }

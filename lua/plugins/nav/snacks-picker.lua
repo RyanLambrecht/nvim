@@ -7,6 +7,7 @@ return {
   opts = {
     picker = {
       preview = false,
+      uiselect = true,
       layout = {},
     },
   },

@@ -121,12 +121,31 @@ return {
         end,
       })
 
+      -- Background highlight on the diagnostic text range
+      local function diag_hl()
+        local set = vim.api.nvim_set_hl
+        set(0, 'DiagnosticUnderlineError', { bg = '#5c141a' })
+        set(0, 'DiagnosticUnderlineWarn', { bg = '#484e34' })
+        set(0, 'DiagnosticUnderlineInfo', { bg = '#3b4d8c' })
+        set(0, 'DiagnosticUnderlineHint', { bg = '#356639' })
+        -- old colors
+        -- set(0, 'DiagnosticUnderlineError', { bg = '#3c2025' })
+        -- set(0, 'DiagnosticUnderlineWarn', { bg = '#3b3320' })
+        -- set(0, 'DiagnosticUnderlineInfo', { bg = '#1f2f3b' })
+        -- set(0, 'DiagnosticUnderlineHint', { bg = '#1f3b2c' })
+      end
+      diag_hl() -- cyberdream is already loaded by the time VeryLazy fires
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        group = vim.api.nvim_create_augroup('diag-hl', { clear = true }),
+        callback = diag_hl,
+      })
       -- Diagnostic Config
       -- See :help vim.diagnostic.Opts
       vim.diagnostic.config {
         severity_sort = true,
         float = { border = 'rounded', source = 'if_many' },
-        underline = { severity = vim.diagnostic.severity.ERROR },
+        --underline = { severity = vim.diagnostic.severity.ERROR },
+        underline = true,
         signs = vim.g.have_nerd_font and {
           text = {
             [vim.diagnostic.severity.ERROR] = '󰅚 ',
@@ -151,7 +170,15 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        clangd = {
+          staticcheck = true,
+          cmd = {
+            'clangd',
+            '--background-index',
+            '--clang-tidy',
+            '--function-arg-placeholders=false',
+          },
+        },
         gopls = {
           settings = {
             gopls = {

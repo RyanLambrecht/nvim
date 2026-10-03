@@ -47,7 +47,7 @@ return {
     config = function()
       require('cyberdream').setup {
         transparent = true,
-        cache = true,
+        cache = false,
         italic_comments = true,
       }
     end,

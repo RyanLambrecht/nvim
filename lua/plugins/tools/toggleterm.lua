@@ -40,6 +40,98 @@ local function scoped_terminal(direction)
   Terminal:new({ dir = dir, direction = direction }):toggle()
 end
 
+---------------------------------------------------------------------------
+-- Terminal management: cycle / pick / delete
+---------------------------------------------------------------------------
+
+local function terms()
+  return require('toggleterm.terminal').get_all(true) -- sorted by id
+end
+
+-- the toggleterm terminal in the focused window, if any
+local function current_term()
+  local buf = vim.api.nvim_get_current_buf()
+  for _, t in ipairs(terms()) do
+    if t.bufnr == buf then
+      return t
+    end
+  end
+end
+
+-- close the focused terminal (if any) and open `target` in its place
+local function switch_to(target)
+  local cur = current_term()
+  if cur == target then
+    return
+  end
+  if cur then
+    cur:close()
+  end
+  target:open()
+end
+
+local function cycle(step)
+  local all = terms()
+  if #all == 0 then
+    return vim.notify('No terminals', vim.log.levels.INFO)
+  end
+  local cur, idx = current_term(), 0
+  for i, t in ipairs(all) do
+    if t == cur then
+      idx = i
+    end
+  end
+  local target
+  if idx == 0 then
+    target = step > 0 and all[1] or all[#all]
+  else
+    target = all[((idx - 1 + step) % #all) + 1]
+  end
+  switch_to(target)
+end
+
+local function kill(t)
+  if t == term then
+    term = nil -- shared terminal gets recreated on next <leader>ts/tv
+  end
+  t:shutdown() -- closes window, kills job, wipes buffer
+end
+
+local function label(t)
+  local dir = t.dir and vim.fn.fnamemodify(t.dir, ':~') or vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
+  return string.format('%d  %-10s %s%s', t.id, t.direction, dir, t:is_open() and '  ●' or '')
+end
+
+local function pick(prompt, on_choice)
+  local all = terms()
+  if #all == 0 then
+    return vim.notify('No terminals', vim.log.levels.INFO)
+  end
+  vim.ui.select(all, { prompt = prompt, format_item = label }, function(t)
+    if t then
+      on_choice(t)
+    end
+  end)
+end
+
+local function delete_current()
+  local cur = current_term()
+  if not cur then
+    return vim.notify('Not in a toggleterm terminal', vim.log.levels.WARN)
+  end
+  local all = terms()
+  local fallback
+  for i, t in ipairs(all) do
+    if t == cur then
+      fallback = all[i - 1] or all[i + 1]
+    end
+  end
+  kill(cur)
+  if fallback then
+    fallback:open()
+  end
+end
+
 return {
   {
     'akinsho/toggleterm.nvim',
@@ -99,12 +191,52 @@ return {
         end,
         desc = 'which_key_ignore',
       },
+
+      -- terminal management
+      {
+        '<leader>tn',
+        function()
+          cycle(1)
+        end,
+        desc = 'Next terminal',
+      },
+      {
+        '<leader>tp',
+        function()
+          cycle(-1)
+        end,
+        desc = 'Previous terminal',
+      },
+      {
+        '<leader>tl',
+        function()
+          pick('Switch terminal', switch_to)
+        end,
+        desc = 'List/switch terminals',
+      },
+      { '<leader>td', delete_current, desc = 'Delete current terminal' },
+      {
+        '<leader>tx',
+        function()
+          pick('Delete terminal', kill)
+        end,
+        desc = 'Pick terminal to delete',
+      },
+      {
+        '<leader>tX',
+        function()
+          for _, t in ipairs(terms()) do
+            kill(t)
+          end
+        end,
+        desc = 'Delete all terminals',
+      },
     },
     config = function()
       require('toggleterm').setup {
         size = function(term)
           if term.direction == 'vertical' then
-            return math.floor(vim.o.columns * 0.2) -- 40% of screen width
+            return math.floor(vim.o.columns * 0.2) -- 20% of screen width
           elseif term.direction == 'horizontal' then
             return 15
           end

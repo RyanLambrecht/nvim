@@ -124,3 +124,15 @@ local function toggle_colorcol()
 end
 
 vim.keymap.set('n', '<leader>Tc', toggle_colorcol, { desc = 'Toggle color column (80)' })
+
+-- Hypothetically kill stray servers
+-- vim.api.nvim_create_autocmd("UILeave", {
+vim.api.nvim_create_autocmd('UILeave', {
+  callback = function()
+    if #vim.api.nvim_list_uis() == 0 then
+      vim.schedule(function()
+        vim.cmd 'silent! wall | qa!'
+      end)
+    end
+  end,
+})
