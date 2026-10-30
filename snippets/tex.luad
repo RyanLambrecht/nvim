@@ -1,0 +1,21 @@
+local ls = require 'luasnip'
+local s, i = ls.snippet, ls.insert_node
+local fmta = require('luasnip.extras.fmt').fmta
+local rep = require('luasnip.extras').rep
+
+local body = [[
+\begin{<>}
+	<>
+\end{<>}
+]]
+
+return {
+  -- B: regular snippet, expanded through the blink menu
+  s({ trig = 'tstb', name = 'TEST rep via blink' }, fmta(body, { i(1), i(0), rep(1) })),
+
+  -- C: same construct the plugin's `beg` uses (parse_snippet with repeated $1)
+  ls.parser.parse_snippet({ trig = 'tstc', name = 'TEST parse_snippet' }, '\\begin{$1}\n\t$0\n\\end{$1}'),
+}, {
+  -- A: autosnippet, expands as you type, blink is not involved
+  s({ trig = 'tsta', name = 'TEST rep autosnippet' }, fmta(body, { i(1), i(0), rep(1) })),
+}

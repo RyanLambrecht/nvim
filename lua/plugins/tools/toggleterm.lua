@@ -232,23 +232,21 @@ return {
         desc = 'Delete all terminals',
       },
     },
-    config = function()
-      require('toggleterm').setup {
-        size = function(term)
-          if term.direction == 'vertical' then
-            return math.floor(vim.o.columns * 0.2) -- 20% of screen width
-          elseif term.direction == 'horizontal' then
-            return 15
-          end
-        end,
-        direction = 'horizontal', -- use "float" if you prefer floating terminals
-        shade_terminals = true,
-        start_in_insert = true, -- start terminal ready for input
-        persist_mode = true, -- keeps insert mode on reopen
-        close_on_exit = true,
-        shell = vim.o.shell, -- use your default shell
-      }
-    end,
+    opts = {
+      size = function(term)
+        if term.direction == 'vertical' then
+          return math.floor(vim.o.columns * 0.2) -- 20% of screen width
+        elseif term.direction == 'horizontal' then
+          return 15
+        end
+      end,
+      direction = 'horizontal', -- use "float" if you prefer floating terminals
+      shade_terminals = true,
+      start_in_insert = true, -- start terminal ready for input
+      persist_mode = true, -- keeps insert mode on reopen
+      close_on_exit = true,
+      shell = vim.o.shell, -- use your default shell
+    },
   },
 }
 

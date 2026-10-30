@@ -1,30 +1,27 @@
 ---@type LazySpec
 return {
-  'uga-rosa/ccc.nvim',
-  event = 'VeryLazy',
-  ft = { 'html', 'css', 'javascript', 'typescript' },
-
-  config = function()
-    local ccc = require 'ccc'
-    local wk = require 'which-key'
-
-    ccc.setup {
+  {
+    'uga-rosa/ccc.nvim',
+    ft = { 'html', 'css', 'javascript', 'typescript' },
+    keys = {
+      { '<leader><localleader>cp', '<cmd>CccPick<cr>', desc = 'Pick color' },
+      { '<leader><localleader>cc', '<cmd>CccConvert<cr>', desc = 'Convert color' },
+    },
+    opts = {
       highlighter = {
         auto_enable = true,
         lsp = true,
       },
-    }
+    },
+  },
 
-    vim.keymap.set('n', '<localleader>cp', ':CccPick<CR>', {
-      desc = 'Pick color',
-    })
-
-    vim.keymap.set('n', '<localleader>cc', ':CccConvert<CR>', {
-      desc = 'Convert color',
-    })
-
-    wk.add {
-      { '<localleader>c', group = 'Color' },
-    }
-  end,
+  {
+    'folke/which-key.nvim',
+    optional = true,
+    opts = {
+      spec = {
+        { '<leader>c', group = 'Color' },
+      },
+    },
+  },
 }

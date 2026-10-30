@@ -3,39 +3,28 @@ vim.o.number = true
 vim.o.relativenumber = true
 
 -- UI
+vim.o.termguicolors = true
 vim.o.showmode = false
 vim.o.signcolumn = 'yes'
 vim.o.scrolloff = 10
 vim.o.inccommand = 'split'
 vim.o.list = true
-vim.opt.listchars = {
-  tab = '» ',
-  trail = '·',
-  nbsp = '␣',
-}
-vim.o.termguicolors = true
-
---vim.o.colorcolumn = '80'
-vim.o.inccommand = 'split'
-vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-vim.o.termguicolors = true
--- vim.api.nvim_set_hl(0, 'Cursor', { fg = '#000000', bg = '#FF0000' })
 
 -- Splits
 vim.o.splitright = true
 vim.o.splitbelow = true
 
 -- Tabs / Indentation
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
 vim.o.breakindent = true
 
 -- Search
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
--- Performance
+-- Timing
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 
@@ -54,7 +43,7 @@ vim.o.mouse = ''
 -- Folding
 vim.o.foldenable = true
 vim.o.foldmethod = 'expr'
-vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+-- vim.o.foldexpr = 'nvim_treesitter#foldexpr()' -- see note: may need v:lua.vim.treesitter.foldexpr()
 vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 
@@ -75,5 +64,7 @@ end
 -- venv for python
 vim.g.python3_host_prog = vim.fn.expand '~/.venvs/nvim/bin/python3'
 
--- switch :grep to use ripgrep
-vim.opt.grepprg = 'rg --vimgrep --smart-case'
+-- :grep uses ripgrep
+vim.o.grepprg = 'rg --vimgrep --smart-case'
+
+vim.filetype.add { extension = { tmpl = 'gohtmltmpl' } }

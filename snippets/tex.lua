@@ -1,9 +1,22 @@
 local ls = require 'luasnip'
 local s = ls.snippet
+local t = ls.text_node
 local i = ls.insert_node
-local fmt = require('luasnip.extras.fmt').fmt
+local fmta = require('luasnip.extras.fmt').fmta
+local rep = require('luasnip.extras').rep
 
 return {
+  s(
+    { trig = 'begin', name = 'begin/end (mirror)', priority = 2000 },
+    fmta(
+      [[
+    \begin{<>}
+    	<>
+    \end{<>}
+  ]],
+      { i(1), i(0), rep(1) }
+    )
+  ),
   s('tex', {
     t '$',
     i(1, ''),

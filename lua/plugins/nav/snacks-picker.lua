@@ -35,7 +35,7 @@ return {
       desc = '[S]earch [K]eymaps',
     },
     {
-      '<leader>sF',
+      '<leader>sf',
       function()
         Snacks.picker.files()
       end,

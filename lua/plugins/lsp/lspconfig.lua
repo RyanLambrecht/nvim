@@ -180,14 +180,22 @@ return {
           },
         },
         gopls = {
+          filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' }, --'gohtmltmpl'
           settings = {
             gopls = {
               staticcheck = true,
+              templateExtensions = { 'gohtml', 'tmpl' },
             },
           },
         },
-        pyright = {},
-        ruff = {},
+        pyright = {
+          disableOrganizeImports = true,
+        },
+        ruff = {
+          on_attach = function(client)
+            client.server_capabilities.hoverProvider = false
+          end,
+        },
         markdown_oxide = {
           -- The server reports routine progress ("VAULT Lock is good", ...) via
           -- window/logMessage, which Neovim logs at ERROR level and bloats lsp.log.
@@ -195,6 +203,23 @@ return {
           handlers = { ['window/logMessage'] = function() end },
         },
         texlab = {},
+        ts_ls = {},
+        html = {
+          filetypes = { 'html', 'templ', 'gohtmltmpl' },
+          get_language_id = function()
+            return 'html'
+          end,
+        },
+        emmet_language_server = {
+          filetypes = { 'html', 'templ', 'gohtmltmpl', 'css', 'scss', 'javascriptreact', 'typescriptreact' },
+          get_language_id = function()
+            return 'html'
+          end,
+        },
+        htmx = {
+          filetypes = { 'html', 'templ', 'gohtmltmpl' },
+        },
+        templ = {},
         tailwindcss = {},
         tombi = {
           -- tombi writes routine info to stderr, which Neovim logs at ERROR level.

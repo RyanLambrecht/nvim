@@ -27,6 +27,7 @@ return {
     filesystem = {
       hijack_netrw_behavior = 'disabled',
       window = {
+        position = 'right',
         width = 25,
         mappings = {
           ['\\'] = 'close_window',

@@ -106,7 +106,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking text',
   group = config_group,
   callback = function()
-    vim.hl.on_yank()
+    vim.hl.hl_op()
   end,
 })
 
@@ -136,3 +136,11 @@ vim.api.nvim_create_autocmd('UILeave', {
     end
   end,
 })
+vim.filetype.add {
+  extension = {
+    gohtml = 'gohtmltmpl',
+  },
+}
+
+-- so treesitter uses the gotmpl parser for this filetype
+vim.treesitter.language.register('gotmpl', 'gohtmltmpl')

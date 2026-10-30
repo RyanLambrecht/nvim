@@ -10,12 +10,11 @@ return {
     vim.g.molten_auto_open_output = false
   end,
   keys = {
-    { '<localleader>mi', ':MoltenInit<CR>', desc = 'Init Molten kernel' },
-    { '<localleader>me', ':MoltenEvaluateOperator<CR>', desc = 'Evaluate operator' },
-    { '<localleader>ml', ':MoltenEvaluateLine<CR>', desc = 'Evaluate line' },
-    { '<localleader>mc', ':MoltenReevaluateCell<CR>', desc = 'Re-eval cell' },
-    { '<localleader>mo', ':MoltenShowOutput<CR>', desc = 'Show output' },
+    { '<localleader>mi', ':MoltenInit<CR>', ft = { 'python', 'markdown' }, desc = 'Init Molten kernel' },
+    { '<localleader>me', ':MoltenEvaluateOperator<CR>', ft = { 'python', 'markdown' }, desc = 'Evaluate operator' },
+    { '<localleader>ml', ':MoltenEvaluateLine<CR>', ft = { 'python', 'markdown' }, desc = 'Evaluate line' },
+    { '<localleader>mc', ':MoltenReevaluateCell<CR>', ft = { 'python', 'markdown' }, desc = 'Re-eval cell' },
+    { '<localleader>mo', ':MoltenShowOutput<CR>', ft = { 'python', 'markdown' }, desc = 'Show output' },
+    { '<localleader>mv', ':<C-u>MoltenEvaluateVisual<CR>gv', mode = 'v', ft = { 'python', 'markdown' }, desc = 'Evaluate selection' },
   },
 }
-
--- Come back to this and figure out how you could use it to rended latex and such cause that would be awesome and yeah

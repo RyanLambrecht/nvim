@@ -24,11 +24,11 @@ return {
   vim.cmd('hi LineNr guibg=NONE ctermbg=NONE')
 ]],
         },
-        -- {
-        --   name = 'no syntax',
-        --   colorscheme = 'boring',
-        --   after = [[ vim.cmd('hi Normal guibg=NONE ctermbg=NONE') ]],
-        -- },
+        {
+          name = 'no syntax',
+          colorscheme = 'boring',
+          after = [[ vim.cmd('hi Normal guibg=NONE ctermbg=NONE') ]],
+        },
         {
           name = 'cyberdream',
           colorscheme = 'cyberdream',
@@ -36,6 +36,10 @@ return {
         {
           name = 'tokyo-night-night',
           colorscheme = 'tokyonight',
+        },
+        {
+          name = 'moonfly',
+          colorscheme = 'moonfly',
         },
       },
       livePreview = true,
@@ -78,5 +82,13 @@ return {
   {
     'ntk148v/komau.vim',
     lazy = true,
+  },
+  {
+    'bluz71/vim-moonfly-colors',
+    name = 'moonfly',
+    lazy = true,
+    config = function()
+      vim.g.moonflyTransparent = true
+    end,
   },
 }

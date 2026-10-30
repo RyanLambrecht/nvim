@@ -1,7 +1,15 @@
 -- See `:help vim.keymap.set()`
 
 -- Clear search highlights
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+--vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+-- Clear on esc
+vim.keymap.set('n', '<Esc>', function()
+  vim.cmd.nohlsearch()
+  vim.cmd.diffupdate()
+  vim.api.nvim_buf_clear_namespace(0, vim.api.nvim_create_namespace 'nvim.multicursor', 0, -1)
+  vim.cmd.redraw { bang = true }
+end, { desc = 'Clear hlsearch, multicursors, redraw' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -78,8 +86,6 @@ vim.keymap.set('n', '<leader>nC', ':%bd<cr>', { desc = '[c]lear all buffers' })
 --   print('Spell check: ' .. (vim.opt.spell:get() and 'ON' or 'OFF'))
 -- end, { desc = 'Toggle spell check' })
 --
-
-vim.keymap.set('n', '<leader>od', ':vs ~/Downloads/<CR>', { desc = 'Downloads' })
 
 vim.keymap.set('n', '<leader>R', function()
   local clients = vim.lsp.get_clients { bufnr = 0 }

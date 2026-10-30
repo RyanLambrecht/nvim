@@ -2,7 +2,64 @@
 return {
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
-    lazy = false,
+    event = 'VeryLazy',
+    keys = {
+      {
+        '<leader>nm',
+        function()
+          require('mini.map').toggle()
+        end,
+        desc = '[m]inimap',
+      },
+
+      -- Sessions: save and restore your open files, splits, and cursor positions
+      --
+      -- First time on a project:  <leader>nsw  then type a name (e.g. "myproject")
+      -- Coming back to a project: <leader>nsl  and pick it from the list
+      -- Cleanup old sessions:     <leader>nsd  and pick one to delete
+      -- Detach (don't save on exit): <leader>nsx
+      --
+      -- autowrite means quitting Neovim automatically updates the current session,
+      -- so you only ever need <leader>nsw once per project.
+      {
+        '<leader>nsw',
+        function()
+          require('mini.sessions').write(vim.fn.input 'Session name: ')
+        end,
+        desc = '[s]ession [w]rite',
+      },
+      {
+        '<leader>nsr',
+        function()
+          require('mini.sessions').select()
+        end,
+        desc = '[s]ession [r]estore',
+      },
+      {
+        '<leader>nsd',
+        function()
+          require('mini.sessions').select 'delete'
+        end,
+        desc = '[s]ession [d]elete',
+      },
+      {
+        '<leader>nsx',
+        function()
+          vim.v.this_session = ''
+          vim.notify('Session detached', vim.log.levels.INFO)
+        end,
+        desc = '[s]ession [x] detach',
+      },
+
+      -- Open the snacks dashboard from anywhere
+      {
+        '<leader>nd',
+        function()
+          require('snacks').dashboard()
+        end,
+        desc = '[d]ashboard',
+      },
+    },
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -20,13 +77,13 @@ return {
       require('mini.surround').setup {
         silent = true,
         mappings = {
-          add = 'gsa', -- add surrounding (normal + visual)
-          delete = 'gsd',
-          find = 'gsf', -- find to the right
-          find_left = 'gsF', -- find to the left
-          highlight = 'gsh',
-          replace = 'gsr',
-          update_n_lines = 'gsn',
+          -- add = 'gsa', -- add surrounding (normal + visual)
+          -- delete = 'gsd',
+          -- find = 'gsf', -- find to the right
+          -- find_left = 'gsF', -- find to the left
+          -- highlight = 'gsh',
+          -- replace = 'gsr',
+          -- update_n_lines = 'gsn',
         },
       }
 
@@ -36,39 +93,11 @@ return {
           width = 10,
         },
       }
-      vim.keymap.set('n', '<leader>nm', MiniMap.toggle, { desc = '[m]inimap' })
 
-      -- Sessions: save and restore your open files, splits, and cursor positions
-      --
-      -- First time on a project:  <leader>nsw  then type a name (e.g. "myproject")
-      -- Coming back to a project: <leader>nsl  and pick it from the list
-      -- Cleanup old sessions:     <leader>nsd  and pick one to delete
-      -- Detach (don't save on exit): <leader>nsx
-      --
-      -- autowrite means quitting Neovim automatically updates the current session,
-      -- so you only ever need <leader>nswonce per project.
       require('mini.sessions').setup {
         autowrite = true,
         directory = vim.fn.stdpath 'data' .. '/sessions',
       }
-      vim.keymap.set('n', '<leader>nsw', function()
-        MiniSessions.write(vim.fn.input 'Session name: ')
-      end, { desc = '[s]ession [w]rite' })
-      vim.keymap.set('n', '<leader>nsl', function()
-        MiniSessions.select()
-      end, { desc = '[s]ession [l]oad' })
-      vim.keymap.set('n', '<leader>nsd', function()
-        MiniSessions.select 'delete'
-      end, { desc = '[s]ession [d]elete' })
-      vim.keymap.set('n', '<leader>nsx', function()
-        vim.v.this_session = ''
-        vim.notify('Session detached', vim.log.levels.INFO)
-      end, { desc = '[s]ession [x] detach' })
-
-      -- Open the snacks dashboard from anywhere
-      vim.keymap.set('n', '<leader>nd', function()
-        require('snacks').dashboard()
-      end, { desc = '[d]ashboard' })
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,

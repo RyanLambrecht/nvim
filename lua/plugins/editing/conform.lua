@@ -33,6 +33,7 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        templ = { 'templ' },
         markdown = { 'prettier' },
         swift = { 'swiftformat' },
         c = { 'clang-format' },
@@ -40,7 +41,7 @@ return {
         json = { 'fixjson' },
         go = { 'goimports' },
         sh = { 'shfmt' },
-        python = { 'ruff_format' },
+        python = { 'ruff_organize_imports', 'ruff_format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

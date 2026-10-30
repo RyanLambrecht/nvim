@@ -1,23 +1,19 @@
 ---@type LazySpec
 return {
   'L3MON4D3/LuaSnip',
+  build = 'make install_jsregexp',
   lazy = true,
   dependencies = {
     'iurimateus/luasnip-latex-snippets.nvim',
   },
   config = function()
     local ls = require 'luasnip'
-
-    -- Math zone condition using treesitter
-    local function in_mathzone()
-      local node = vim.treesitter.get_node()
-      if not node then
-        return false
-      end
-      local t = node:type()
-      return t == 'inline_formula' or t == 'displayed_equation'
-    end
-    require('luasnip.extras.conditions').make_condition(in_mathzone)
+    ls.config.set_config {
+      update_events = 'TextChanged,TextChangedI',
+      history = false, -- set explicitly so exited snippets can't be jumped back into
+      region_check_events = 'InsertEnter', -- check "am I outside the snippet?" when you start typing
+      delete_check_events = 'InsertLeave', -- clean up if the snippet text was deleted
+    }
 
     -- filetype_extend BEFORE setup so the library sees it
     ls.filetype_extend('markdown', { 'tex' })
@@ -41,20 +37,21 @@ return {
       require('luasnip-latex-snippets').setup { use_treesitter = true }
     end
 
-    -- Snippet unlink on mode change
-    local function leave_snippet()
-      ---@diagnostic disable-next-line: undefined-field
-      local old = vim.v.event.old_mode
-      ---@diagnostic disable-next-line: undefined-field
-      local new = vim.v.event.new_mode
-      if ((old == 's' and new == 'n') or old == 'i') and ls.session.current_nodes[vim.api.nvim_get_current_buf()] and not ls.session.jump_active then
-        ls.unlink_current()
-      end
-    end
-    vim.api.nvim_create_autocmd('ModeChanged', {
-      pattern = '*',
-      callback = leave_snippet,
-    })
+    -- ---@diagnostic disable-next-line: undefined-field
+    -- -- Snippet unlink on mode change
+    -- local function leave_snippet()
+    --   ---@diagnostic disable-next-line: undefined-field
+    --   local old = vim.v.event.old_mode
+    --   ---@diagnostic disable-next-line: undefined-field
+    --   local new = vim.v.event.new_mode
+    --   if (old == 's' or old == 'i') and new == 'n' and ls.session.current_nodes[vim.api.nvim_get_current_buf()] and not ls.session.jump_active then
+    --     ls.unlink_current()
+    --   end
+    -- end
+    -- vim.api.nvim_create_autocmd('ModeChanged', {
+    --   pattern = '*',
+    --   callback = leave_snippet,
+    -- })
 
     require('luasnip.loaders.from_lua').load {
       paths = { vim.fn.stdpath 'config' .. '/snippets' },

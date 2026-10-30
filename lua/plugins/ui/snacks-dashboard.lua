@@ -1,4 +1,28 @@
 -- lua/plugins/ui/snacks-dashboard.lua
+
+-- Picker that lists directories and :cd's into the selected one.
+-- `extra_args` are appended to the fd args (e.g. depth limits).
+local function pick_dir(cwd, title, extra_args)
+  Snacks.picker.files {
+    cwd = cwd,
+    finder = 'files',
+    args = vim.list_extend({ '--type', 'd' }, extra_args or {}),
+    title = title,
+    confirm = function(picker, item)
+      picker:close()
+      local dir = item and Snacks.picker.util.path(item)
+      if dir then
+        vim.cmd.cd(vim.fn.fnameescape(dir))
+        vim.notify('cwd: ' .. vim.fn.getcwd(), vim.log.levels.INFO)
+        -- Opens whatever handles directory buffers (oil, netrw, etc.)
+        vim.schedule(function()
+          vim.cmd.edit '.'
+        end)
+      end
+    end,
+  }
+end
+
 ---@type LazySpec
 return {
   'folke/snacks.nvim',
@@ -47,14 +71,8 @@ return {
             key = 'p',
             desc = '[⇧] Projects',
             action = function()
-              Snacks.picker.files {
-                cwd = '~/code/',
-                finder = 'files',
-                --args = { '--type', 'd', '--max-depth', '2', '--min-depth', '2' },
-                args = { '--type', 'd' },
-                title = 'Search Projects',
-                -- preview = false,
-              }
+              -- Limit to top-level project dirs: { '--max-depth', '2', '--min-depth', '2' }
+              pick_dir('~/code/', 'Search Projects')
             end,
           },
           {
@@ -74,13 +92,7 @@ return {
             key = 'n',
             desc = '[⇧] Notes',
             action = function()
-              Snacks.picker.files {
-                cwd = '~/notes/',
-                finder = 'files',
-                args = { '--type', 'd' },
-                title = 'Search Note Directories',
-                -- preview = false,
-              }
+              pick_dir('~/notes/', 'Search Note Directories')
             end,
           },
           {
@@ -130,12 +142,12 @@ return {
             desc = '[ ] Find File',
             action = ":lua Snacks.dashboard.pick('files')",
           },
-          {
-            icon = '󰊄 ',
-            key = 'g',
-            desc = '[ ] Find Text',
-            action = ":lua Snacks.dashboard.pick('live_grep')",
-          },
+          -- {
+          --   icon = '󰊄 ',
+          --   key = 'g',
+          --   desc = '[ ] Find Text',
+          --   action = ":lua Snacks.dashboard.pick('live_grep')",
+          -- },
           {
             icon = '󰒲 ',
             key = 'L',

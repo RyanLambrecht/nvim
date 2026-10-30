@@ -8,7 +8,7 @@ return {
       -- Snippet Engine
       {
         'L3MON4D3/LuaSnip',
-        version = '1.*',
+        --        version = '1.*',
         lazy = true,
         build = (function()
           -- Build Step is needed for regex support in snippets.
@@ -30,7 +30,6 @@ return {
             end,
           },
         },
-        opts = {},
       },
     },
     --- @module 'blink.cmp'

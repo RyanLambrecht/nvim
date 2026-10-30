@@ -137,7 +137,10 @@ end
 -- autocmds must exist BEFORE the saved theme is applied so its
 -- ColorScheme event gets caught
 function M.setup()
+  local group = vim.api.nvim_create_augroup('DynamicTheme', { clear = true })
+
   vim.api.nvim_create_autocmd('BufEnter', {
+    group = group,
     callback = function()
       if vim.bo.buftype ~= 'terminal' then
         sync_cursor_color(vim.g.colors_name)
@@ -146,23 +149,26 @@ function M.setup()
   })
 
   vim.api.nvim_create_autocmd('ColorScheme', {
+    group = group,
     callback = function(ev)
-      if ev.match ~= 'default' then
-        vim.cmd 'syntax on'
-      end
-
       sync_cursor_color(ev.match)
+      -- re-apply after other ColorScheme handlers (and NeoColumn) have run
+      vim.schedule(function()
+        sync_cursor_color(ev.match)
+      end)
     end,
   })
 
   -- run after NeoColumn's own handlers so our ColorColumn wins
   vim.api.nvim_create_autocmd({ 'FileType', 'BufEnter', 'BufWinEnter' }, {
+    group = group,
     callback = function()
       vim.schedule(sync_neocolumn)
     end,
   })
 
   vim.api.nvim_create_autocmd({ 'VimLeavePre', 'VimSuspend' }, {
+    group = group,
     callback = osc112_reset,
   })
 end
@@ -195,18 +201,18 @@ end
 -- ColorScheme Autocommand
 ----------------------------------------------------------------------
 
-vim.api.nvim_create_autocmd('ColorScheme', {
-  callback = function(ev)
-    if ev.match ~= 'default' then
-      vim.cmd 'syntax on'
-    end
-
-    sync_cursor_color(ev.match)
-
-    vim.schedule(function()
-      sync_cursor_color(ev.match)
-    end)
-  end,
-})
+-- vim.api.nvim_create_autocmd('ColorScheme', {
+--   callback = function(ev)
+--     if ev.match ~= 'default' then
+--       vim.cmd 'syntax on'
+--     end
+--
+--     sync_cursor_color(ev.match)
+--
+--     vim.schedule(function()
+--       sync_cursor_color(ev.match)
+--     end)
+--   end,
+-- })
 
 return M

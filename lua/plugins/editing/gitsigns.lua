@@ -1,23 +1,8 @@
---- Alternatively, use `config = function() ... end` for full control over the configuration.
--- If you prefer to call `setup` explicitly, use:
---    {
---        'lewis6991/gitsigns.nvim',
---        config = function()
---            require('gitsigns').setup({
---                -- Your gitsigns configuration here
---            })
---        end,
---    }
---
--- Here is a more advanced example where we pass configuration
--- options to `gitsigns.nvim`.
---
--- See `:help gitsigns` to understand what the configuration keys do
 ---@type LazySpec
 return {
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
+  {
     'lewis6991/gitsigns.nvim',
-    lazy = true,
+    event = { 'BufReadPre', 'BufNewFile' },
     opts = {
       signs = {
         add = { text = '+' },
@@ -52,19 +37,18 @@ return {
           end
         end, { desc = 'Jump to previous git [c]hange' })
 
-        -- Actions
-        -- visual mode
+        -- Actions (visual)
         map('v', '<leader>hs', function()
           gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
         end, { desc = 'git [s]tage hunk' })
         map('v', '<leader>hr', function()
           gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
         end, { desc = 'git [r]eset hunk' })
-        -- normal mode
-        map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage hunk' })
+
+        -- Actions (normal)
+        map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage/unstage hunk' })
         map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'git [r]eset hunk' })
         map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
-        map('n', '<leader>hu', gitsigns.stage_hunk, { desc = 'git [u]ndo stage hunk' })
         map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
         map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
         map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
@@ -72,11 +56,21 @@ return {
         map('n', '<leader>hD', function()
           gitsigns.diffthis '@'
         end, { desc = 'git [D]iff against last commit' })
+
         -- Toggles
         map('n', '<leader>Tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
         map('n', '<leader>TD', gitsigns.preview_hunk_inline, { desc = '[T]oggle git show [D]eleted' })
       end,
     },
   },
+
+  {
+    'folke/which-key.nvim',
+    optional = true,
+    opts = {
+      spec = {
+        { '<leader>h', group = 'Git hunks' },
+      },
+    },
+  },
 }
--- vim: ts=2 sts=2 sw=2 et
