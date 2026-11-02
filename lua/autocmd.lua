@@ -144,3 +144,12 @@ vim.filetype.add {
 
 -- so treesitter uses the gotmpl parser for this filetype
 vim.treesitter.language.register('gotmpl', 'gohtmltmpl')
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = function()
+    vim.api.nvim_set_hl(0, 'SpellBad', { undercurl = true, sp = '#ff6e6e' })
+    vim.api.nvim_set_hl(0, 'SpellCap', { undercurl = true, sp = '#f1ff5e' })
+    vim.api.nvim_set_hl(0, 'SpellRare', { undercurl = true, sp = '#bd5eff' })
+    vim.api.nvim_set_hl(0, 'SpellLocal', { undercurl = true, sp = '#5ef1ff' })
+  end,
+})
