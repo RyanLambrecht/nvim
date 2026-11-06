@@ -1,21 +1,41 @@
 ---@type LazySpec
 return {
-  lazy = true,
-  ft = 'markdown',
-  'MeanderingProgrammer/render-markdown.nvim',
-  dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' }, -- if you use the mini.nvim suite
-  -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' },        -- if you use standalone mini plugins
-  -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-  ---@module 'render-markdown'
-  ---@type render.md.UserConfig
-  opts = {
-    opts = { file_types = { 'markdown', 'latex', 'tex', 'copilot-chat' } },
-    latex = {
-      enabled = true,
-      converter = 'pylatexenc',
-      highlight = 'RenderMarkdownMath',
-      top_pad = 0,
-      bot_pad = 0,
+  {
+    lazy = true,
+    ft = 'markdown',
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' }, -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' },        -- if you use standalone mini plugins
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    keys = {
+      {
+        '<localleader>Tr',
+        function()
+          require('render-markdown').toggle()
+        end,
+        desc = 'render-markdown: toggle',
+      },
+    },
+    opts = {
+      opts = { file_types = { 'markdown', 'latex', 'tex', 'copilot-chat' } },
+      latex = {
+        enabled = true,
+        converter = 'pylatexenc',
+        highlight = 'RenderMarkdownMath',
+        top_pad = 0,
+        bot_pad = 0,
+      },
+    },
+  },
+  {
+    'folke/which-key.nvim',
+    optional = true,
+    opts = {
+      spec = {
+        { '<localleader>T', group = 'Toggle' },
+      },
     },
   },
 }

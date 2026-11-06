@@ -9,7 +9,8 @@ if has_ts_cli then
   return {
     {
       'nvim-treesitter/nvim-treesitter',
-      lazy = false, -- main branch doesn't support lazy-loading; ensures the FileType autocmd exists before the first buffer
+      -- lazy = false, -- main branch doesn't support lazy-loading; ensures the FileType autocmd exists before the first buffer
+      event = { 'BufReadPost', 'BufNewFile' }, -- Changed from lazy = false
       branch = 'main',
       build = ':TSUpdate',
       config = function()

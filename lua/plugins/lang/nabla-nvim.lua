@@ -1,16 +1,42 @@
 ---@type LazySpec
 return {
-  'jbyuki/nabla.nvim',
-  lazy = true,
-  ft = { 'markdown', 'tex' },
-  config = function()
-    vim.api.nvim_create_autocmd('FileType', {
-      pattern = { 'markdown', 'tex' },
-      callback = function()
-        vim.keymap.set('n', 'K', require('nabla').popup, { desc = 'Nabla: popup equation preview', buffer = true })
-        vim.keymap.set('n', '<localleader><localleader>', require('nabla').popup, { desc = 'Nabla: popup equation preview', buffer = true })
-        vim.keymap.set('n', '<localLeader>tp', require('nabla').toggle_virt, { desc = 'Nabla: toggle inline virtual text', buffer = true })
-      end,
-    })
-  end,
+  {
+    'jbyuki/nabla.nvim',
+    ft = { 'markdown', 'tex' },
+    keys = {
+      {
+        '<localleader><localleader>',
+        function()
+          require('nabla').popup()
+        end,
+        desc = 'Nabla: popup equation preview',
+      },
+      {
+        '<localleader>Tn',
+        function()
+          require('nabla').toggle_virt()
+        end,
+        ft = { 'markdown', 'tex' },
+        desc = 'Nabla: toggle inline virtual text',
+      },
+      -- optional
+      -- {
+      --   'K',
+      --   function()
+      --     require('nabla').popup()
+      --   end,
+      --   ft = { 'markdown', 'tex' },
+      --   desc = 'Nabla: popup equation preview',
+      -- },
+    },
+  },
+  {
+    'folke/which-key.nvim',
+    optional = true,
+    opts = {
+      spec = {
+        { '<localleader>T', group = 'Toggle' },
+      },
+    },
+  },
 }

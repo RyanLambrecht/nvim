@@ -68,7 +68,7 @@ vim.keymap.set('t', '<C-n>', '<Down>', { desc = 'Next terminal command' })
 
 vim.keymap.set('n', '<leader>nr', ':restart!<cr>', { desc = '[r]estart!' })
 
-vim.keymap.set('n', '<leader>nc', function()
+vim.keymap.set('n', '<leader>nbc', function()
   local current = vim.api.nvim_get_current_buf()
 
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -78,7 +78,7 @@ vim.keymap.set('n', '<leader>nc', function()
   end
 end, { desc = '[c]lear other buffers' })
 
-vim.keymap.set('n', '<leader>nC', ':%bd<cr>', { desc = '[c]lear all buffers' })
+vim.keymap.set('n', '<leader>nbC', ':%bd<cr>', { desc = '[c]lear all buffers' })
 
 -- Misc
 -- vim.keymap.set('n', '<leader>Ts', function()

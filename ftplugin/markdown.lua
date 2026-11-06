@@ -9,3 +9,8 @@ local function fix_spelling()
 end
 
 vim.keymap.set('n', '<localleader>s', fix_spelling, { buffer = true, desc = 'Fix spelling (current or next)' })
+
+vim.opt_local.spell = true
+-- vim.opt_local.spelllang = "en_us"
+--
+vim.keymap.set('v', '<localleader>t', 'd$p$', { desc = 'to tex' })

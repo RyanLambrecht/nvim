@@ -1,7 +1,8 @@
 ---@type LazySpec
 return {
   'lervag/vimtex',
-  lazy = false, -- vimtex lazy-loads itself via ftplugin; ft= breaks inverse search
+  -- lazy = false, -- vimtex lazy-loads itself via ftplugin; ft= breaks inverse search
+  ft = { 'tex', 'bib', 'cls' },
   init = function()
     vim.g.vimtex_matchparen_enabled = 0
     vim.g.vimtex_mappings_prefix = '<localleader>l'

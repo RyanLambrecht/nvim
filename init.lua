@@ -37,4 +37,3 @@ require('custom.cursorline').setup()
 -- experimental ui
 
 require('vim._core.ui2').enable {}
--- --:help modeline if need

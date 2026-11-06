@@ -171,7 +171,6 @@ return {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {
-          staticcheck = true,
           cmd = {
             'clangd',
             '--background-index',
@@ -189,7 +188,9 @@ return {
           },
         },
         pyright = {
-          disableOrganizeImports = true,
+          settings = {
+            pyright = { disableOrganizeImports = true },
+          },
         },
         ruff = {
           on_attach = function(client)
@@ -277,6 +278,8 @@ return {
       })
       require('mason-tool-installer').setup {
         ensure_installed = ensure_installed,
+        start_delay = 3000,
+        debounce_hours = 12,
       }
 
       -- sourcekit-lsp for Swift (not managed by mason, ships with Xcode)
@@ -291,7 +294,7 @@ return {
               on_dir(root)
             end
           end,
-          cmd = { vim.trim(vim.fn.system 'xcrun -f sourcekit-lsp') },
+          cmd = { 'xcrun', 'sourcekit-lsp' },
         })
         vim.lsp.enable 'sourcekit'
       end

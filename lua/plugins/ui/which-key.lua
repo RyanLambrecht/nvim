@@ -59,6 +59,7 @@ return {
         { '<leader>ns', group = '[s]ession' },
         { '<leader>o', group = '[o]pen dir' },
         { '<leader>r', group = '[r]emote' },
+        { '<leader>nb', group = 'buffers' },
       },
     },
     config = function(_, opts)
